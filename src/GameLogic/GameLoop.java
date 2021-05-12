@@ -9,12 +9,11 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Observer;
 
 public class GameLoop extends Canvas implements Runnable {
 
-    private static int WIDTH = 640;
-    private static int HEIGHT = WIDTH / 12 * 9;
+    private static final int WIDTH = 640;
+    private static final int HEIGHT = WIDTH / 12 * 9;
 
     private int updateNum;
 
@@ -78,7 +77,7 @@ public class GameLoop extends Canvas implements Runnable {
     }
 
     //other game loop, unrestricted frame rate, however highly taxing on the CPU
-    //doesnt work with current implementation of resume, likely due to the dependence on timings
+    //doesn't work with current implementation of resume, likely due to the dependence on timings
 //   @Override
 //    public void run() {
 //        this.requestFocus();

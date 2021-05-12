@@ -4,13 +4,11 @@ import GameLogic.GameLoop;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Observable;
-import java.util.Observer;
 
 public class GameWindow extends JFrame {
-    private static int WIDTH = 640;
-    private static int HEIGHT = WIDTH / 12 * 9;
-    private static String TITLE = "Platformer Game";
+    private static final int WIDTH = 640;
+    private static final int HEIGHT = WIDTH / 12 * 9;
+    private static final String TITLE = "Platformer Game";
     private mainMenuPanel mainMenuPanel;
     private GameLoop gameLoop;
     private EscapeMenu escape;

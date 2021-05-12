@@ -5,10 +5,8 @@ import UI.GameWindow;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
-public class GameManager extends Observable {
+public class GameManager {
 
     private final GameWindow gameWindow;
     public ArrayList<Sprite> sprites = new ArrayList<>();
@@ -17,7 +15,7 @@ public class GameManager extends Observable {
     public ArrayList<Sprite> toDelete = new ArrayList<>();
     private boolean playerShoot1 = false;
     private boolean playerShoot2 = false;
-    private static int COOLDOWN = 5;
+    private static final int COOLDOWN = 5;
     private int counter1 = COOLDOWN;
     private int counter2 = COOLDOWN;
 
@@ -158,10 +156,6 @@ public class GameManager extends Observable {
     public void addPlayer2(Player player) {
         this.player2 = player;
         sprites.add(player);
-    }
-
-    public ArrayList<Sprite> getSprites() {
-        return sprites;
     }
 
     public void resetPlayers() {

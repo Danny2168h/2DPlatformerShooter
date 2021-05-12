@@ -112,7 +112,7 @@ public class Player extends Sprite {
     }
 
     //check if it will collide rather than dealing with collisions after colliding, if we check after it collides it is
-    // ambigous as to which dimensions collisions handler we should use
+    // ambiguous as to which dimensions collisions handler we should use
 
     private void handleHorizontalCollision() {
 
@@ -126,7 +126,7 @@ public class Player extends Sprite {
         Rectangle temp = new Rectangle((int) (hitBox.x + xVel), hitBox.y, hitBox.width, hitBox.height);
         for (Sprite element : gameState.sprites) {
             if (element.hitBox.intersects(temp)) {
-                if (element.getClass() != p.getClass() && element.getClass() != this.getClass()) {
+                if (element.getClass() != p.getClass() && !element.equals(this)) {
                     if (goingRight) {
                         xVel = 0;
                         xLoc = element.xLoc - width;
@@ -155,7 +155,7 @@ public class Player extends Sprite {
         Rectangle temp = new Rectangle(hitBox.x, (int) (hitBox.y + yVel), hitBox.width, hitBox.height);
         for (Sprite element : gameState.sprites) {
             if (element.hitBox.intersects(temp)) {
-                if (element.getClass() != p.getClass() && element.getClass() != this.getClass()) {
+                if (element.getClass() != p.getClass() && !element.equals(this)) {
                     if (goingDown) {
                         yLoc = element.yLoc - hitBox.height;
                         hitBox.y = yLoc;
