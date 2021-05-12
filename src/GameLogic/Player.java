@@ -19,6 +19,8 @@ public class Player extends Sprite {
 
     private GameManager gameState;
 
+    public int HP = 100;
+
     public Player(int x, int y, int width, int height) {
 
         super(x, y, width, height);
@@ -35,6 +37,11 @@ public class Player extends Sprite {
     public void update(GameManager manager) {
 
         gameState = manager;
+
+        if (HP <= 0) {
+            gameState.toDelete.add(this);
+        }
+
         yVel += 1;
         LeftRightMovement(); //movement handlers also handle collisions
         UpDownMovement();
@@ -60,6 +67,11 @@ public class Player extends Sprite {
         //g.fillRect(xLoc, yLoc, width, height);
 
         g.drawImage(image, xLoc, yLoc, width, height, null);
+
+//        String ammoCount = "Ammo: " + ammo;
+//        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+//        g.setColor(Color.BLACK); // Here
+//        g.drawString(ammoCount, 0,0);
 
     }
 
@@ -104,7 +116,7 @@ public class Player extends Sprite {
 
     private void handleHorizontalCollision() {
 
-        Projectile p = new Projectile(1, 1, false);
+        Projectile p = new Projectile(1, 1, false, 0, false);
 
         boolean goingRight = false;
 
@@ -133,7 +145,7 @@ public class Player extends Sprite {
 
     private void handleVerticalCollisions() {
 
-        Projectile p = new Projectile(1, 1, false);
+        Projectile p = new Projectile(1, 1, false, 0, false);
 
         boolean goingDown = false;
 

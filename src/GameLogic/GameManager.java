@@ -1,5 +1,7 @@
 package GameLogic;
 
+import UI.GameWindow;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -8,17 +10,20 @@ import java.util.Observer;
 
 public class GameManager extends Observable {
 
+    private final GameWindow gameWindow;
     public ArrayList<Sprite> sprites = new ArrayList<>();
     public Player player1;
     public Player player2;
     public ArrayList<Sprite> toDelete = new ArrayList<>();
-    private boolean shoot = false;
+    private boolean playerShoot1 = false;
+    private boolean playerShoot2 = false;
     private static int COOLDOWN = 5;
-    private int counter = COOLDOWN;
-    private boolean s;
+    private int counter1 = COOLDOWN;
+    private int counter2 = COOLDOWN;
 
-    public GameManager(Observer observer) {
-        addObserver(observer);
+
+    public GameManager(GameWindow gameWindow) {
+        this.gameWindow = gameWindow;
     }
 
 
@@ -32,22 +37,40 @@ public class GameManager extends Observable {
     }
 
     private void projectileHandler() {
-        if (counter != 0) {
-            counter--;
+        if (counter1 != 0) {
+            counter1--;
         }
 
-        if (shoot && counter == 0 && player1.ammo > 0) {
+        if (counter2 != 0) {
+            counter2--;
+        }
+
+        if (playerShoot1 && counter1 == 0 && player1.ammo > 0 && player1.HP > 0) {
             Projectile projectile;
             if (player1.direction) {
                 projectile = new Projectile(player1.xLoc + player1.width - 4,
-                        player1.yLoc - 10 + player1.height / 2, true);
+                        player1.yLoc - 10 + player1.height / 2, true, 10, true);
             } else {
                 projectile = new Projectile(player1.xLoc - 4,
-                        player1.yLoc - 10 + player1.height / 2, false);
+                        player1.yLoc - 10 + player1.height / 2, false, 10, true);
             }
             sprites.add(projectile);
-            counter = COOLDOWN;
+            counter1 = COOLDOWN;
             player1.ammo--;
+        }
+
+        if (playerShoot2 && counter2 == 0 && player2.ammo > 0 && player2 .HP > 0) {
+            Projectile projectile;
+            if (player2.direction) {
+                projectile = new Projectile(player2.xLoc + player2.width - 4,
+                        player2.yLoc - 10 + player2.height / 2, true, 10, false);
+            } else {
+                projectile = new Projectile(player2.xLoc - 4,
+                        player2.yLoc - 10 + player2.height / 2, false, 10, false);
+            }
+            sprites.add(projectile);
+            counter2 = COOLDOWN;
+            player2.ammo--;
         }
     }
 
@@ -88,11 +111,13 @@ public class GameManager extends Observable {
             player2.keyRight = true;
         }
         if (e.getKeyChar() == 'j') {
-            shoot = true;
+            playerShoot1 = true;
+        }
+        if (e.getKeyChar() == '2') {
+            playerShoot2 = true;
         }
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            setChanged();
-            notifyObservers();
+            gameWindow.pressEsc();
         }
     }
 
@@ -117,7 +142,11 @@ public class GameManager extends Observable {
             player2.keyRight = false;
         }
         if (e.getKeyChar() == 'j') {
-            shoot = false;
+            playerShoot1 = false;
+        }
+
+        if (e.getKeyChar() == '2') {
+            playerShoot2 = false;
         }
     }
 
@@ -137,8 +166,9 @@ public class GameManager extends Observable {
 
     public void resetPlayers() {
 
-        shoot = false;
-        
+        playerShoot1 = false;
+        playerShoot2 = false;
+
         if (player1 != null) {
             player1.keyDown = false;
             player1.keyUp = false;

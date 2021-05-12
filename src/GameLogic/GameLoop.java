@@ -1,6 +1,9 @@
 package GameLogic;
 
+import UI.GameWindow;
+
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -12,7 +15,6 @@ public class GameLoop extends Canvas implements Runnable {
 
     private static int WIDTH = 640;
     private static int HEIGHT = WIDTH / 12 * 9;
-    private static String TITLE = "Platformer Game";
 
     private int updateNum;
 
@@ -25,9 +27,9 @@ public class GameLoop extends Canvas implements Runnable {
 
     //in constructor is where we add elements to the game manager
 
-    public GameLoop(boolean s, Observer observer) {
+    public GameLoop(boolean s, GameWindow gameWindow) {
 
-        gameManager = new GameManager(observer);
+        gameManager = new GameManager(gameWindow);
         if (s) {
             gameManager.addPlayer1(new Player(30, 30, 20, 40));
         } else {
@@ -76,8 +78,8 @@ public class GameLoop extends Canvas implements Runnable {
     }
 
     //other game loop, unrestricted frame rate, however highly taxing on the CPU
-//
-//    @Override
+    //doesnt work with current implementation of resume, likely due to the dependence on timings
+//   @Override
 //    public void run() {
 //        this.requestFocus();
 //        long lastTime = System.nanoTime();
@@ -159,25 +161,32 @@ public class GameLoop extends Canvas implements Runnable {
 
 
     private void render() {
+        this.setVisible(true);
 
         BufferStrategy buffer = this.getBufferStrategy();
         if (buffer == null) {
-            this.createBufferStrategy(3);
+            this.createBufferStrategy(2);
             return;
         }
 
         Graphics g = buffer.getDrawGraphics();
 
-
+        //g.setColor(Color.blue);
         g.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT, null);
 
-        //g.setColor(Color.blue);
         //g.fillRect(0,0, WIDTH, HEIGHT);
 
         gameManager.renderEach(g);
 
         g.dispose();
         buffer.show();
+
+
+//        Graphics g = getGraphics();
+//
+//        g.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT, null);
+//        gameManager.renderEach(g);
+
     }
 
     private void update() {

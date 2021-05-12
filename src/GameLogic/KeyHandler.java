@@ -7,7 +7,6 @@ public class KeyHandler extends KeyAdapter {
 
     private GameManager manager;
 
-
     public KeyHandler(GameManager gameManager) {
         manager = gameManager;
     }

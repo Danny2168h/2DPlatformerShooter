@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.Observable;
 import java.util.Observer;
 
-public class GameWindow extends JFrame implements Observer {
+public class GameWindow extends JFrame {
     private static int WIDTH = 640;
     private static int HEIGHT = WIDTH / 12 * 9;
     private static String TITLE = "Platformer Game";
@@ -45,8 +45,7 @@ public class GameWindow extends JFrame implements Observer {
         gameLoop.start();
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
+    public void pressEsc() {
         gameLoop.thread.suspend(); // basically a block
         this.remove(gameLoop);
         gameLoop.resetPlayer();
@@ -71,10 +70,10 @@ public class GameWindow extends JFrame implements Observer {
     public void resumeGame() {
         this.remove(escape);
       // escape = null;
-        this.repaint();//basically unblock
+        this.repaint();
         this.add(gameLoop);
-        gameLoop.thread.resume();
-        gameLoop.requestFocus();
         this.setVisible(true);
+        gameLoop.requestFocus();
+        gameLoop.thread.resume();
     }
 }
