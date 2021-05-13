@@ -3,7 +3,6 @@ package GameLogic;
 import UI.GameWindow;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -22,7 +21,7 @@ public class GameLoop extends Canvas implements Runnable {
 
     private BufferedImage backgroundImage;
 
-    private GameManager gameManager;
+    private final GameManager gameManager;
 
     //in constructor is where we add elements to the game manager
 
@@ -44,18 +43,20 @@ public class GameLoop extends Canvas implements Runnable {
         int WALL_WIDTH = 100;
         int WALL_HEIGHT = 25;
         for (int i = 0; i < WIDTH; i += WALL_WIDTH - 20) {
-            gameManager.addSprite(new Walls(i, 360, WALL_WIDTH, WALL_HEIGHT));
+            gameManager.addSprite(new Platform(i, 360, WALL_WIDTH, WALL_HEIGHT));
         }
 
         gameManager.addSprite(new Boundary(0,0, 1, HEIGHT));
         gameManager.addSprite(new Boundary(WIDTH - 50, 0, 1, HEIGHT));
 
-        gameManager.addSprite(new Walls(300, 200, WALL_WIDTH, WALL_HEIGHT));
-        gameManager.addSprite(new Walls(180, 290, WALL_WIDTH, WALL_HEIGHT));
-        gameManager.addSprite(new Walls(400, 320, WALL_WIDTH, WALL_HEIGHT));
+        gameManager.addSprite(new Platform(300, 200, WALL_WIDTH, WALL_HEIGHT));
+        gameManager.addSprite(new Platform(180, 290, WALL_WIDTH, WALL_HEIGHT));
+        gameManager.addSprite(new Platform(400, 320, WALL_WIDTH, WALL_HEIGHT));
+
+        String basepath = new File("").getAbsolutePath();
 
         try {
-            backgroundImage = ImageIO.read(new File("C:\\Users\\Danny\\2DPlatformerShooter\\src\\Resources\\background.jpg"));
+            backgroundImage = ImageIO.read(new File(basepath + "\\src\\Resources\\background.jpg"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }

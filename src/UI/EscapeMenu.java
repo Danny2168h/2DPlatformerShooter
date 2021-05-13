@@ -3,6 +3,8 @@ package UI;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.net.URL;
 
 public class EscapeMenu extends JPanel{
     private JButton resume;
@@ -12,14 +14,14 @@ public class EscapeMenu extends JPanel{
     private static final int YPOSITION = 150;
     private static final int WIDTH = 200;
     private static final int HEIGHT = 35;
-    private ImageIcon backgroundImage;
-    private GameWindow gw;
+    private final GameWindow gw;
 
     public EscapeMenu(GameWindow gw) {
         this.gw = gw;
         buttonInitiation();
         buttonLayout();
-        backgroundImage = new ImageIcon("C:\\Users\\Danny\\2DPlatformerShooter\\src\\Resources\\background.jpg");
+        String basepath = new File("").getAbsolutePath();
+        ImageIcon backgroundImage = new ImageIcon(basepath + "\\src\\Resources\\background.jpg");
         JLabel background = new JLabel(backgroundImage);
         background.setSize(900,500);
         this.add(background);

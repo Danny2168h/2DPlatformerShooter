@@ -25,8 +25,10 @@ public class Player extends Sprite {
 
         super(x, y, width, height);
 
+        String basepath = new File("").getAbsolutePath();
+
         try {
-            image = ImageIO.read(new File("C:\\Users\\Danny\\2DPlatformerShooter\\src\\Resources\\mokey.jpg"));
+            image = ImageIO.read(new File(basepath + "\\src\\Resources\\mokey.jpg"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -44,9 +46,18 @@ public class Player extends Sprite {
         //movement handlers also handle collisions
         UpDownMovement();
         LeftRightMovement();
-       // System.out.println("xVel: " + xVel);
 
-        xLoc += xVel;
+//        if (xVel != 0) {
+//             System.out.println("xVel: " + xVel + "    X coord: " + xLoc);
+//
+//        }
+
+        if (xVel > 0) {
+            xLoc = (int) Math.ceil(xLoc + xVel); //java cast from int to double means that positive additions lose values after decimal point
+        } else {
+            xLoc += xVel;
+        }
+
         yLoc += yVel;
 
         hitBox.x = xLoc;
@@ -79,9 +90,9 @@ public class Player extends Sprite {
         if (keyLeft && keyRight || !keyLeft && !keyRight) {
             xVel *= 0.75;
         } else if (keyLeft && !keyRight) {
-            xVel -= 1;
+            xVel -= 0.5;
         } else if (keyRight && !keyLeft) {
-            xVel += 1;
+            xVel += 0.5;
         }
         handleHorizontalCollision();
         horizontalLimiters();
@@ -89,34 +100,34 @@ public class Player extends Sprite {
 
     //caps speed in horizontal directions
     private void horizontalLimiters() {
-        if (xVel < 0.75 && xVel > 0) {
+        if (xVel < 0.50 && xVel > 0) {
             xVel = 0;
         }
-        if (xVel > -0.75 && xVel < 0) {
+        if (xVel > -0.50 && xVel < 0) {
             xVel = 0;
         }
-        if (xVel > 6.5) {
-            xVel = 6.5;
+        if (xVel > 6) {
+            xVel = 6;
         }
-        if (xVel < -6.5)
-            xVel = -6.5;
+        if (xVel < -6)
+            xVel = -6;
     }
 
     private void UpDownMovement() {
         if (keyUp && keyDown || !keyUp && !keyDown) {
         } else if (keyUp && !keyDown && touchingGround) {
-            yVel -= 17;
+            yVel -= 15;
             touchingGround = false;
         } else if (keyDown && !keyUp) {
-            yVel += 0.5;
+            yVel += 0.8;
         }
         handleVerticalCollisions();
         verticalLimiters();
     }
 
     private void verticalLimiters() {
-        if (yVel >= 10) {
-            yVel = 10;
+        if (yVel >= 9) {
+            yVel = 9;
         }
     }
 
@@ -133,22 +144,19 @@ public class Player extends Sprite {
             goingRight = true;
         }
 
-        Rectangle temp = new Rectangle((int) (hitBox.x + xVel), hitBox.y, hitBox.width, hitBox.height);
+        Rectangle left = new Rectangle((int) (hitBox.x + xVel), hitBox.y, hitBox.width, hitBox.height);
+        Rectangle right = new Rectangle((int) Math.ceil(hitBox.x + xVel), hitBox.y, hitBox.width, hitBox.height);
         for (Sprite element : gameState.sprites) {
-            if (element.hitBox.intersects(temp)) {
-                if (element.getClass() != p.getClass() && !element.equals(this)) {
-                    if (goingRight) {
-                        xVel = 0;
-                        xLoc = element.hitBox.x - width;
-                        hitBox.x = xLoc;
-                        break;
-                    } else {
-                        xVel = 0;
-                        xLoc = element.hitBox.x + element.hitBox.width;
-                        hitBox.x = xLoc;
-                        break;
-                    }
-                }
+            if (goingRight && element.getClass() != p.getClass() && !element.equals(this) && element.hitBox.intersects(right)) {
+                xVel = 0;
+                xLoc = element.hitBox.x - width;
+                hitBox.x = xLoc;
+                break;
+            } else if (!goingRight && element.getClass() != p.getClass() && !element.equals(this) && element.hitBox.intersects(left)) {
+                xVel = 0;
+                xLoc = element.hitBox.x + element.hitBox.width;
+                hitBox.x = xLoc;
+                break;
             }
         }
     }

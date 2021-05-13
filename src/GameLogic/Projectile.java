@@ -9,11 +9,11 @@ public class Projectile extends Sprite{
 
     private GameManager gameState;
 
-    private int damage;
+    private final int damage;
 
-    private boolean player1;
+    private final boolean player1;
 
-    private boolean direction;
+    private final boolean direction;
 
     //true is positive (right), false is negative (left)
     public Projectile(int x, int y, boolean direction, int damage, boolean player) { //boolean determines which player projectile belongs to
@@ -26,9 +26,9 @@ public class Projectile extends Sprite{
         } else {
             xVel = -10;
         }
-
+        String basepath = new File("").getAbsolutePath();
         try {
-            image = ImageIO.read(new File("C:\\Users\\Danny\\2DPlatformerShooter\\src\\Resources\\fireball.png"));
+            image = ImageIO.read(new File(basepath + "\\src\\Resources\\fireball.png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }

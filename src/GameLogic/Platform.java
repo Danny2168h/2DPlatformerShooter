@@ -5,13 +5,15 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-public class Walls extends Sprite {
+public class Platform extends Sprite {
 
-    public Walls(int x, int y, int width, int height) {
+    public Platform(int x, int y, int width, int height) {
         super(x, y, width, height);
 
+        String basepath = new File("").getAbsolutePath();
+
         try {
-            image = ImageIO.read(new File("C:\\Users\\Danny\\2DPlatformerShooter\\src\\Resources\\platform.png"));
+            image = ImageIO.read(new File(basepath + "\\src\\Resources\\platform.png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }

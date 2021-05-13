@@ -13,7 +13,7 @@ public abstract class Sprite {
     protected int height; // used to draw the image
     protected int width;
 
-    protected Rectangle hitBox; //usually same width and height however may choose to use smaller hitbox
+    protected Rectangle hitBox; //usually same width and height however may choose to use smaller hitBox
 
     protected BufferedImage image;
     
