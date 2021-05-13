@@ -46,11 +46,11 @@ public class GameManager {
         if (playerShoot1 && counter1 == 0 && player1.ammo > 0 && player1.HP > 0) {
             Projectile projectile;
             if (player1.direction) {
-                projectile = new Projectile(player1.xLoc + player1.width - 4,
-                        player1.yLoc - 10 + player1.height / 2, true, 10, true);
+                projectile = new Projectile(player1.xLoc + player1.width,
+                        player1.yLoc + player1.height / 2, true, 10, true);
             } else {
-                projectile = new Projectile(player1.xLoc - 4,
-                        player1.yLoc - 10 + player1.height / 2, false, 10, true);
+                projectile = new Projectile(player1.xLoc,
+                        player1.yLoc + player1.height / 2, false, 10, true);
             }
             sprites.add(projectile);
             counter1 = COOLDOWN;
@@ -60,11 +60,11 @@ public class GameManager {
         if (playerShoot2 && counter2 == 0 && player2.ammo > 0 && player2 .HP > 0) {
             Projectile projectile;
             if (player2.direction) {
-                projectile = new Projectile(player2.xLoc + player2.width - 4,
-                        player2.yLoc - 10 + player2.height / 2, true, 10, false);
+                projectile = new Projectile(player2.xLoc + player2.width,
+                        player2.yLoc + player2.height / 2, true, 10, false);
             } else {
-                projectile = new Projectile(player2.xLoc - 4,
-                        player2.yLoc - 10 + player2.height / 2, false, 10, false);
+                projectile = new Projectile(player2.xLoc,
+                        player2.yLoc + player2.height / 2, false, 10, false);
             }
             sprites.add(projectile);
             counter2 = COOLDOWN;
@@ -94,19 +94,23 @@ public class GameManager {
             player1.keyUp = true;
         } else if (e.getKeyChar() == 'a') {
             player1.keyLeft = true;
+            player1.direction = false;
         } else if (e.getKeyChar() == 's') {
             player1.keyDown = true;
         } else if (e.getKeyChar() == 'd') {
             player1.keyRight = true;
+            player1.direction = true;
         }
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             player2.keyUp = true;
         } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             player2.keyLeft = true;
+            player2.direction = false;
         } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             player2.keyDown = true;
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             player2.keyRight = true;
+            player2.direction = true;
         }
         if (e.getKeyChar() == 'j') {
             playerShoot1 = true;

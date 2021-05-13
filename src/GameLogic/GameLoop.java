@@ -36,6 +36,7 @@ public class GameLoop extends Canvas implements Runnable {
             gameManager.addPlayer2(new Player(100, 100, 20, 40));
         }
         setUpGame();
+        this.addKeyListener(new KeyHandler(gameManager));
         //new UI.GameWindow(WIDTH, HEIGHT, TITLE, this);
     }
 
@@ -51,7 +52,7 @@ public class GameLoop extends Canvas implements Runnable {
 
         gameManager.addSprite(new Walls(300, 200, WALL_WIDTH, WALL_HEIGHT));
         gameManager.addSprite(new Walls(180, 290, WALL_WIDTH, WALL_HEIGHT));
-        this.addKeyListener(new KeyHandler(gameManager));
+        gameManager.addSprite(new Walls(400, 320, WALL_WIDTH, WALL_HEIGHT));
 
         try {
             backgroundImage = ImageIO.read(new File("C:\\Users\\Danny\\2DPlatformerShooter\\src\\Resources\\background.jpg"));

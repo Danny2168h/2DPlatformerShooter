@@ -30,8 +30,6 @@ public class Player extends Sprite {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
-        hitBox = new Rectangle(x, y, width, 26);
     }
 
     public void update(GameManager manager) {
@@ -42,20 +40,14 @@ public class Player extends Sprite {
             gameState.toDelete.add(this);
         }
 
-        yVel += 1;
-        LeftRightMovement(); //movement handlers also handle collisions
+        yVel += 1.5;
+        //movement handlers also handle collisions
         UpDownMovement();
+        LeftRightMovement();
+       // System.out.println("xVel: " + xVel);
 
         xLoc += xVel;
         yLoc += yVel;
-
-        if (xVel > 0) {
-            direction = true;
-        } else if (xVel == 0){
-            //dont change direction
-        } else if (xVel < 0) {
-            direction = false;
-        }
 
         hitBox.x = xLoc;
         hitBox.y = yLoc;
@@ -63,10 +55,18 @@ public class Player extends Sprite {
 
     public void render(Graphics g) {
 
-       // g.setColor(Color.green);
+        //g.setColor(Color.green);
         //g.fillRect(xLoc, yLoc, width, height);
 
         g.drawImage(image, xLoc, yLoc, width, height, null);
+        g.setColor(Color.black);
+        if (direction) {
+            g.fillRect(xLoc + 6*width/8, yLoc + height/3, 20, 3 );
+        } else {
+            g.fillRect(xLoc - 6*width/8, yLoc + height/3, 20, 3 );
+        }
+
+
 
 //        String ammoCount = "Ammo: " + ammo;
 //        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
@@ -77,37 +77,46 @@ public class Player extends Sprite {
 
     private void LeftRightMovement() { //smooth movement
         if (keyLeft && keyRight || !keyLeft && !keyRight) {
-            xVel *= 0.8;
+            xVel *= 0.75;
         } else if (keyLeft && !keyRight) {
             xVel -= 1;
         } else if (keyRight && !keyLeft) {
             xVel += 1;
         }
         handleHorizontalCollision();
-        if (xVel < 0.4 && xVel >= 0) {
+        horizontalLimiters();
+    }
+
+    //caps speed in horizontal directions
+    private void horizontalLimiters() {
+        if (xVel < 0.75 && xVel > 0) {
             xVel = 0;
         }
-        if (xVel > -0.4 && xVel <= 0) {
+        if (xVel > -0.75 && xVel < 0) {
             xVel = 0;
         }
-        if (xVel >= 7) {
-            xVel = 7;
+        if (xVel > 6.5) {
+            xVel = 6.5;
         }
-        if (xVel <= -7)
-            xVel = -7;
+        if (xVel < -6.5)
+            xVel = -6.5;
     }
 
     private void UpDownMovement() {
         if (keyUp && keyDown || !keyUp && !keyDown) {
         } else if (keyUp && !keyDown && touchingGround) {
-            yVel -= 15;
+            yVel -= 17;
             touchingGround = false;
         } else if (keyDown && !keyUp) {
             yVel += 0.5;
         }
         handleVerticalCollisions();
-        if (yVel >= 9) {
-            yVel = 9;
+        verticalLimiters();
+    }
+
+    private void verticalLimiters() {
+        if (yVel >= 10) {
+            yVel = 10;
         }
     }
 
@@ -123,18 +132,19 @@ public class Player extends Sprite {
         if (xVel > 0) {
             goingRight = true;
         }
+
         Rectangle temp = new Rectangle((int) (hitBox.x + xVel), hitBox.y, hitBox.width, hitBox.height);
         for (Sprite element : gameState.sprites) {
             if (element.hitBox.intersects(temp)) {
                 if (element.getClass() != p.getClass() && !element.equals(this)) {
                     if (goingRight) {
                         xVel = 0;
-                        xLoc = element.xLoc - width;
+                        xLoc = element.hitBox.x - width;
                         hitBox.x = xLoc;
                         break;
                     } else {
                         xVel = 0;
-                        xLoc = element.xLoc + element.hitBox.width;
+                        xLoc = element.hitBox.x + element.hitBox.width;
                         hitBox.x = xLoc;
                         break;
                     }
@@ -157,13 +167,13 @@ public class Player extends Sprite {
             if (element.hitBox.intersects(temp)) {
                 if (element.getClass() != p.getClass() && !element.equals(this)) {
                     if (goingDown) {
-                        yLoc = element.yLoc - hitBox.height;
+                        yLoc = element.hitBox.y - hitBox.height;
                         hitBox.y = yLoc;
                         yVel = 0;
                         touchingGround = true;
                         break;
                     } else {
-                        yLoc = element.yLoc + element.hitBox.height;
+                        yLoc = element.hitBox.y + element.hitBox.height;
                         hitBox.y = yLoc;
                         yVel = 0;
                         break;
@@ -190,4 +200,11 @@ public class Player extends Sprite {
     }
 
 
+    public void takeDamage(int damage) {
+        HP -= damage;
+    }
+
+    public void knockBack(double force) {
+        xVel += force;
+    }
 }

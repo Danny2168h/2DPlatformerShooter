@@ -16,6 +16,9 @@ public class Walls extends Sprite {
             ex.printStackTrace();
         }
 
+        // increases accuracy of platform hitbox
+        hitBox = new Rectangle(x + 6, y + 12, width - 15, height - 15 );
+
     }
 
     @Override

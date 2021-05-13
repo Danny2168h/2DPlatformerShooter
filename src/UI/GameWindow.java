@@ -56,9 +56,9 @@ public class GameWindow extends JFrame {
     public void mainMenu() {
         gameLoop.thread.resume();
         gameLoop.stop();
-     //   gameLoop = null;
+        //gameLoop = null;
         this.remove(escape);
-       // escape = null;
+        //escape = null;
         this.repaint();
         mainMenuPanel = new mainMenuPanel(this);
         this.add(mainMenuPanel);
@@ -67,7 +67,7 @@ public class GameWindow extends JFrame {
 
     public void resumeGame() {
         this.remove(escape);
-      // escape = null;
+        //escape = null;
         this.repaint();
         this.add(gameLoop);
         this.setVisible(true);
