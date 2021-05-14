@@ -14,12 +14,13 @@ public class Weapon extends Sprite {
     private boolean shoot;
     private Player player;
     private GameManager gameState;
+    private double maxSpeed;
 
     private boolean hasOwner;
 
     private int counter;
 
-    public Weapon(int xLoc, int yLoc, int width, int height, double knockBack, int ammo, double bulletSpeed, int damage, int fireRate) {
+    public Weapon(int xLoc, int yLoc, int width, int height, double knockBack, int ammo, double bulletSpeed, int damage, int fireRate, double maxSpeed) {
         super(xLoc, yLoc, width, height);
         this.ammo = ammo;
         this.knockBack = knockBack;
@@ -28,10 +29,12 @@ public class Weapon extends Sprite {
         this.fireRate = fireRate;
         counter = fireRate;
         hasOwner = false;
+        this.maxSpeed = maxSpeed;
         hitBox = new Rectangle(xLoc, yLoc, 20, 20);
+
     }
 
-    public Weapon(int width, int height, double knockBack, int ammo, double bulletSpeed, int damage, int fireRate, Player player) {
+    public Weapon(int x, int width, int height, double knockBack, int ammo, double bulletSpeed, int damage, int fireRate, Player player, double maxSpeed) {
         super(0, 0, width, height);
         this.player = player;
         this.ammo = ammo;
@@ -39,6 +42,7 @@ public class Weapon extends Sprite {
         this.bulletSpeed= bulletSpeed;
         this.damage = damage;
         this.fireRate = fireRate;
+        this.maxSpeed = maxSpeed;
         counter = fireRate;
         hasOwner = true;
         hitBox = new Rectangle(xLoc, yLoc, 20, 20);
@@ -48,10 +52,6 @@ public class Weapon extends Sprite {
     @Override
     public void update(GameManager manager) {
         gameState = manager;
-
-//        if (player == null || ammo == 0) {
-//            handlePickUp();
-//        }
 
         if (player != null) {
             projectileHandler();
@@ -140,5 +140,9 @@ public class Weapon extends Sprite {
 
     public void setAmmo(int i) {
         ammo = i;
+    }
+
+    public double getMaxSpeed() {
+        return maxSpeed;
     }
 }
