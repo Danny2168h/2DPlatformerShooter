@@ -13,6 +13,17 @@ public class GameWindow extends JFrame {
     private GameLoop gameLoop;
     private EscapeMenu escape;
 
+    private Container con1; //player1 health
+    private Container con2; //player1 ammo
+    private Container con3; //player2 health
+    private Container con4; //player2 ammo
+
+    private JPanel healthBar;
+    private JProgressBar healthPro;
+
+    private JPanel healthBar1;
+    private JProgressBar healthPro1;
+
     public GameWindow() {
         this.setTitle(TITLE);
 
@@ -35,15 +46,51 @@ public class GameWindow extends JFrame {
         this.repaint();
         if (s) {
             gameLoop = new GameLoop(true, this);
+            setUpCon(true);
         } else {
             gameLoop = new GameLoop(false, this);
+            setUpCon(false);
         }
         this.add(gameLoop);
         this.setVisible(true);
         gameLoop.start();
     }
 
+    private void setUpCon(boolean s) {
+        con1 = this.getContentPane();
+        healthBar = new JPanel();
+        healthBar.setBounds(10,10,100,20);
+        // healthBar.setBorder(BorderFactory.createEtchedBorder());
+        healthBar.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+
+        con1.add(healthBar);
+
+        healthPro = new JProgressBar(0, 100);
+        healthPro.setPreferredSize(new Dimension(100,20));
+        healthPro.setValue(100);
+        healthPro.setStringPainted(true);
+        healthBar.add(healthPro);
+
+        if(s == false) {
+            con3 = this.getContentPane();
+            healthBar1 = new JPanel();
+            healthBar1.setBounds(515,10,100,20);
+            healthBar1.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+            con3.add(healthBar1);
+
+            healthPro1 = new JProgressBar(0, 100);
+            healthPro1.setPreferredSize(new Dimension(100,20));
+            healthPro1.setValue(100);
+            healthPro1.setStringPainted(true);
+            healthBar1.add(healthPro1);
+        }
+    }
+
     public void pressEsc() {
+        con1.remove(healthBar);
+        if(con3 != null) {
+            con3.remove(healthBar1);
+        }
         gameLoop.thread.suspend(); // basically a block
         this.remove(gameLoop);
         gameLoop.resetPlayer();
@@ -56,9 +103,9 @@ public class GameWindow extends JFrame {
     public void mainMenu() {
         gameLoop.thread.resume();
         gameLoop.stop();
-        //gameLoop = null;
+        //   gameLoop = null;
         this.remove(escape);
-        //escape = null;
+        // escape = null;
         this.repaint();
         mainMenuPanel = new mainMenuPanel(this);
         this.add(mainMenuPanel);
@@ -66,12 +113,57 @@ public class GameWindow extends JFrame {
     }
 
     public void resumeGame() {
+        con1.add(healthBar);
+        if (healthBar != null) {
+            con3.add(healthBar1);
+        }
         this.remove(escape);
-        //escape = null;
+        // escape = null;
         this.repaint();
         this.add(gameLoop);
         this.setVisible(true);
         gameLoop.requestFocus();
         gameLoop.thread.resume();
     }
+
+    public void updateHealth(int hp, int hp1) {
+        healthPro.setValue(hp);
+        healthPro1.setValue(hp1);
+        if(hp <= 0) {
+            playerWon(false);
+        }
+        if(hp1 <= 0) {
+            playerWon(true);
+        }
+    }
+
+    public void updateAmmo(int ammo, int ammo1) {
+    }
+
+    private void playerWon(boolean s) {
+        InternalFrame frame = new InternalFrame();
+        frame.setBounds(500, 200, 500, 300);
+        frame.setVisible(true);
+        if (s) {
+            JOptionPane.showMessageDialog(frame, "Player 1 Wins!");
+        } else {
+            JOptionPane.showMessageDialog(frame, "Player 2 Wins!");
+        }
+        returnToMenu();
+
+    }
+
+    private void returnToMenu() {
+        con1.remove(healthBar);
+        if(con3 != null) {
+            con3.remove(healthBar1);
+        }
+        this.remove(gameLoop);
+        this.repaint();
+        mainMenuPanel = new mainMenuPanel(this);
+        this.add(mainMenuPanel);
+        this.setVisible(true);
+    }
+
 }
+

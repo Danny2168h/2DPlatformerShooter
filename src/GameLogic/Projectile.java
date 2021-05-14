@@ -11,14 +11,14 @@ public class Projectile extends Sprite{
 
     private final int damage;
 
-    private final boolean player1;
+    private final Player player;
 
     private final boolean direction;
 
     //true is positive (right), false is negative (left)
-    public Projectile(int x, int y, boolean direction, int damage, boolean player) { //boolean determines which player projectile belongs to
+    public Projectile(int x, int y, boolean direction, int damage, Player player) { //boolean determines which player projectile belongs to
         super(x,y, 15, 10);
-        player1 = player;
+        this.player = player;
         this.damage = damage;
         this.direction = direction;
         if (direction) {
@@ -28,7 +28,7 @@ public class Projectile extends Sprite{
         }
         String basepath = new File("").getAbsolutePath();
         try {
-            image = ImageIO.read(new File(basepath + "\\src\\Resources\\fireball.png"));
+            image = ImageIO.read(new File(basepath+ "\\src\\Resources\\fireball.png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -44,27 +44,28 @@ public class Projectile extends Sprite{
 
     private void handleCollision() {
 
-        double force = 7.0;
+        double force = 7.0; // for knockback
 
-        // Rectangle temp = new Rectangle((int) (hitBox.x + xVel), hitBox.y, width, height);
         for (Sprite element : gameState.sprites) {
             if (element.hitBox.intersects(hitBox)) {
-                if (!element.equals(this) && element.getClass() != this.getClass() && player1 && !element.equals(gameState.player1)) {
+                if (!element.equals(this) && element.getClass() != this.getClass() && player.equals(gameState.player1) && !element.equals(gameState.player1)) {
                     xVel = 0;
                     gameState.toDelete.add(this);
                     if (element.equals(gameState.player2)) {
                         gameState.player2.takeDamage(damage);
+                        gameState.healthUpdate();
                         if (direction) {
                             gameState.player2.knockBack(force);
                         } else {
                             gameState.player2.knockBack(force * -1);
                         }
                     }
-                } else if (!element.equals(this) && element.getClass() != this.getClass() && !player1 && !element.equals(gameState.player2)) {
+                } else if (!element.equals(this) && element.getClass() != this.getClass() && player.equals(gameState.player2) && !element.equals(gameState.player2)) {
                     xVel = 0;
                     gameState.toDelete.add(this);
                     if (element.equals(gameState.player1)) {
                         gameState.player1.takeDamage(damage);
+                        gameState.healthUpdate();
                         if (direction) {
                             gameState.player1.knockBack(force);
                         } else {
@@ -78,7 +79,7 @@ public class Projectile extends Sprite{
 
     @Override
     public void render(Graphics g) {
-       // g.setColor(Color.red);
+        //g.setColor(Color.red);
         //g.fillRect(xLoc, yLoc, width, height);
 
         g.drawImage(image, xLoc, yLoc, width, height, null);

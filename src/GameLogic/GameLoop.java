@@ -160,7 +160,6 @@ public class GameLoop extends Canvas implements Runnable {
         }
     }
 
-
     private void render() {
         this.setVisible(true);
 
