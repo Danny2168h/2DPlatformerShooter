@@ -126,8 +126,15 @@ public class GameWindow extends JFrame {
 
     public void pressEsc() {
         con1.remove(healthBar);
+        con1.validate();
         if(con3 != null) {
             con3.remove(healthBar1);
+            con3.validate();
+        }
+        con2.remove(ammoBar);
+        if(con4 != null) {
+            con4.remove(ammoBar1);
+            con4.validate();
         }
         gameLoop.thread.suspend(); // basically a block
         this.remove(gameLoop);
@@ -191,11 +198,12 @@ public class GameWindow extends JFrame {
         frame.setBounds(500, 200, 500, 300);
         frame.setVisible(true);
         if (s) {
-            JOptionPane.showMessageDialog(frame, "Player 1 Wins!");
+            JOptionPane.showMessageDialog(frame, "Player1 Won");
+            returnToMenu();
         } else {
-            JOptionPane.showMessageDialog(frame, "Player 2 Wins!");
+            JOptionPane.showMessageDialog(frame, "Player2 Won");
+            returnToMenu();
         }
-        returnToMenu();
 
     }
 
@@ -203,6 +211,10 @@ public class GameWindow extends JFrame {
         con1.remove(healthBar);
         if(con3 != null) {
             con3.remove(healthBar1);
+        }
+        con2.remove(ammoBar);
+        if(con4 != null) {
+            con4.remove(ammoBar1);
         }
         this.remove(gameLoop);
         this.repaint();
