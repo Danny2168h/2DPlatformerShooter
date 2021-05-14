@@ -34,7 +34,7 @@ public class Player extends Sprite {
 
         super(x, y, width, height);
 
-        weapon = new Weapon(20, 4, 5.0, 100, 10.0, 5, 5, this);
+        weapon = new Weapon(20, 4, 2, 100, 10.0, 5, 5, this);
 
         String basepath = new File("").getAbsolutePath();
 

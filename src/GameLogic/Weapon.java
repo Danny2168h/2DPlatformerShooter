@@ -1,5 +1,7 @@
 package GameLogic;
 
+import org.w3c.dom.css.Rect;
+
 import java.awt.*;
 
 public class Weapon extends Sprite {
@@ -26,6 +28,7 @@ public class Weapon extends Sprite {
         this.fireRate = fireRate;
         counter = fireRate;
         hasOwner = false;
+        hitBox = new Rectangle(xLoc, yLoc, 20, 20);
     }
 
     public Weapon(int width, int height, double knockBack, int ammo, double bulletSpeed, int damage, int fireRate, Player player) {
@@ -38,6 +41,7 @@ public class Weapon extends Sprite {
         this.fireRate = fireRate;
         counter = fireRate;
         hasOwner = true;
+        hitBox = new Rectangle(xLoc, yLoc, 20, 20);
     }
 
 
@@ -60,7 +64,7 @@ public class Weapon extends Sprite {
         if (counter != 0) {
             counter--;
         }
-
+        gameState.ammoUpdate();
         if (shoot && counter == 0 && ammo > 0 && player.getHP() > 0) {
             Projectile projectile;
             if (player.getDirection()) {
@@ -73,7 +77,6 @@ public class Weapon extends Sprite {
             gameState.toAdd.add(projectile);
             counter = fireRate;
             ammo--;
-            gameState.ammoUpdate();
         }
     }
 
