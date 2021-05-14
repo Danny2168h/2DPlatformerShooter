@@ -13,7 +13,7 @@ public class Player extends Sprite {
     public boolean keyDown = false;
     public boolean shoot = false;
 
-    public int ammo = 100;
+    public int ammo = 300;
 
     public boolean direction = true; //true is right, false is left
 
