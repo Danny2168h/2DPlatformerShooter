@@ -25,6 +25,10 @@ public class Player extends Sprite {
 
     private boolean addedWeapon = false;
 
+    private double maxXSpeed = 6;
+    private static final double ACCELERATION = 0.5;
+    private static final double JUMP_VELOCITY = 13;
+
   //  public int coolDown = 5;
    // public int counter;
   //  public int ammo = 800;
@@ -34,7 +38,7 @@ public class Player extends Sprite {
 
         super(x, y, width, height);
 
-        weapon = new Weapon(20, 4, 2, 100, 10.0, 5, 5, this);
+        weapon = new Weapon(0,20, 4, 2, 100, 10.0, 5, 5, this, 6);
 
         String basepath = new File("").getAbsolutePath();
 
@@ -89,9 +93,9 @@ public class Player extends Sprite {
         if (keyLeft && keyRight || !keyLeft && !keyRight) {
             xVel *= 0.75;
         } else if (keyLeft && !keyRight) {
-            xVel -= 0.5;
+            xVel -= ACCELERATION;
         } else if (keyRight && !keyLeft) {
-            xVel += 0.5;
+            xVel += ACCELERATION;
         }
         handleHorizontalCollision();
         horizontalLimiters();
@@ -99,24 +103,25 @@ public class Player extends Sprite {
 
     //caps speed in horizontal directions
     private void horizontalLimiters() {
-        if (xVel < 0.50 && xVel > 0) {
+        if (xVel < ACCELERATION && xVel > 0) {
             xVel = 0;
         }
-        if (xVel > -0.50 && xVel < 0) {
+        if (xVel > -1 * ACCELERATION && xVel < 0) {
             xVel = 0;
         }
-        if (xVel > 6) {
-            xVel = 6;
+        if (xVel > maxXSpeed && xVel <= maxXSpeed + ACCELERATION) {
+            xVel = maxXSpeed;
         }
-        if (xVel < -6)
-            xVel = -6;
+        if (xVel < -1 * maxXSpeed && xVel >= -(maxXSpeed + ACCELERATION)) {
+            xVel = -1 * maxXSpeed;
+        }
     }
 
     private void UpDownMovement() {
         if (keyUp && keyDown || !keyUp && !keyDown) {
             // do nothing
         } else if (keyUp && !keyDown && touchingGround) {
-            yVel -= 13;
+            yVel -= JUMP_VELOCITY;
             touchingGround = false;
         } else if (keyDown && !keyUp) {
             yVel += 0.8;
@@ -138,7 +143,7 @@ public class Player extends Sprite {
     private void handleHorizontalCollision() {
 
         Projectile p = new Projectile(1, 1, false, 0, 0,0,this);
-        Weapon w = new Weapon(0,0,0,0,0,0,0,0,0);
+        Weapon w = new Weapon(0,0,0,0,0,0,0,0,this,0);
 
         boolean goingRight = false;
 
@@ -171,6 +176,7 @@ public class Player extends Sprite {
                     weapon = temp;
                     temp.setPlayer(this);
                     temp.setHasOwner();
+                    maxXSpeed = temp.getMaxSpeed();
                 }
             }
         }
@@ -179,7 +185,7 @@ public class Player extends Sprite {
     private void handleVerticalCollisions() {
 
         Projectile p = new Projectile(1, 1, false, 0, 0, 0,this);
-        Weapon w = new Weapon(0,0,0,0,0,0,0,0,0);
+        Weapon w = new Weapon(0,0,0,0,0,0,0,0,this,0);
 
         boolean goingDown = false;
 

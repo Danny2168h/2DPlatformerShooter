@@ -34,11 +34,11 @@ public class GameManager {
         for (Sprite element : sprites) {
             element.update(this);
         }
-        addProjectiles();
+        addElements();
         clearColliders();
     }
 
-    private void addProjectiles() {
+    private void addElements() {
         sprites.addAll(toAdd);
         toAdd = new ArrayList<>();
     }
