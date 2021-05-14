@@ -44,6 +44,7 @@ public class Weapon extends Sprite {
 //        if (player == null || ammo == 0) {
 //            handlePickUp();
 //        }
+
         if (player != null) {
             projectileHandler();
         }
@@ -60,7 +61,7 @@ public class Weapon extends Sprite {
                 projectile = new Projectile(player.getxLoc() + player.getWidth(),
                         player.getyLoc() + player.getHeight() / 2, true, damage, knockBack, bulletSpeed, player);
             } else {
-                projectile = new Projectile(player.getxLoc() + player.getWidth(),
+                projectile = new Projectile(player.getxLoc() -  player.getWidth()/2,
                         player.getyLoc() + player.getHeight() / 2, false, damage, knockBack, bulletSpeed, player);
             }
             gameState.toAdd.add(projectile);
@@ -70,6 +71,7 @@ public class Weapon extends Sprite {
         }
     }
 
+    //causing runtime issues, should probably let player class handle picking up
     private void handlePickUp() {
         Player p = new Player(0,0,0,0);
 

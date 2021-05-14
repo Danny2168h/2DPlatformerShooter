@@ -17,8 +17,6 @@ public class Projectile extends Sprite{
 
     private final double knockBack;
 
-    private final double bulletSpeed;
-
     //true is positive (right), false is negative (left)
     public Projectile(int x, int y, boolean direction, int damage, double knockBack, double bulletSpeed, Player player) { //boolean determines which player projectile belongs to
         super(x,y, 15, 10);
@@ -26,7 +24,6 @@ public class Projectile extends Sprite{
         this.player = player;
         this.damage = damage;
         this.direction = direction;
-        this.bulletSpeed = bulletSpeed;
         if (direction) {
             xVel = bulletSpeed;
         } else {
