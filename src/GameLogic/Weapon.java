@@ -13,6 +13,8 @@ public class Weapon extends Sprite {
     private Player player;
     private GameManager gameState;
 
+    private boolean hasOwner;
+
     private int counter;
 
     public Weapon(int xLoc, int yLoc, int width, int height, double knockBack, int ammo, double bulletSpeed, int damage, int fireRate) {
@@ -23,10 +25,11 @@ public class Weapon extends Sprite {
         this.damage = damage;
         this.fireRate = fireRate;
         counter = fireRate;
+        hasOwner = false;
     }
 
-    public Weapon(int xLoc, int yLoc, int width, int height, double knockBack, int ammo, double bulletSpeed, int damage, int fireRate, Player player) {
-        super(xLoc, yLoc, width, height);
+    public Weapon(int width, int height, double knockBack, int ammo, double bulletSpeed, int damage, int fireRate, Player player) {
+        super(0, 0, width, height);
         this.player = player;
         this.ammo = ammo;
         this.knockBack = knockBack;
@@ -34,6 +37,7 @@ public class Weapon extends Sprite {
         this.damage = damage;
         this.fireRate = fireRate;
         counter = fireRate;
+        hasOwner = true;
     }
 
 
@@ -50,6 +54,8 @@ public class Weapon extends Sprite {
         }
     }
 
+
+    //need to modify projectile spawns to better
     private void projectileHandler() {
         if (counter != 0) {
             counter--;
@@ -72,27 +78,22 @@ public class Weapon extends Sprite {
     }
 
     //causing runtime issues, should probably let player class handle picking up
-    private void handlePickUp() {
-        Player p = new Player(0,0,0,0);
-
-        for (Sprite element : gameState.sprites) {
-            if (element.hitBox.intersects(hitBox)) {
-                if (!element.equals(this) && element.getClass() != this.getClass() && element.getClass() == p.getClass()) {
-                    Player temp = (Player) element;
-                    gameState.toDelete.add(temp.getWeapon());
-                    temp.getWeapon().removePlayer();
-                    temp.setWeapon(this);
-                    temp.refreshedWeapon();
-                    player = temp;
-                    }
-
-                }
-            }
-        }
-
-    private void removePlayer() {
-        player = null;
-    }
+//    private void handlePickUp() {
+//        Player p = new Player(0,0,0,0);
+//
+//        for (Sprite element : gameState.sprites) {
+//            if (element.hitBox.intersects(hitBox)) {
+//                if (!element.equals(this) && element.getClass() != this.getClass() && element.getClass() == p.getClass()) {
+//                    Player temp = (Player) element;
+//                    gameState.toDelete.add(temp.getWeapon());
+//                    temp.getWeapon().removePlayer();
+//                    temp.setWeapon(this);
+//                    //temp.refreshedWeapon(); // may not need to add weapon second time since it is already in the update list
+//                    player = temp;
+//                    }
+//                }
+//            }
+//        }
 
     @Override
     public void render(Graphics g) {
@@ -100,7 +101,6 @@ public class Weapon extends Sprite {
         if (player == null) {
             g.fillRect(xLoc, yLoc, 20, 20);
         } else {
-            g.setColor(Color.black);
             if (player.getDirection()) {
                 g.fillRect(player.getxLoc() + 6*player.getWidth()/8, player.getyLoc() + player.getHeight()/2, width, height);
             } else {
@@ -121,5 +121,21 @@ public class Weapon extends Sprite {
 
     public void noShoot() {
         shoot = false;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public boolean hasOwner() {
+        return hasOwner;
+    }
+
+    public void setHasOwner() {
+        hasOwner = true;
+    }
+
+    public void setAmmo(int i) {
+        ammo = i;
     }
 }

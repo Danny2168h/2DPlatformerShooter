@@ -34,7 +34,7 @@ public class Player extends Sprite {
 
         super(x, y, width, height);
 
-        weapon = new Weapon(0,0, 20, 4, 5.0, 100, 10.0, 5, 5, this);
+        weapon = new Weapon(20, 4, 5.0, 100, 10.0, 5, 5, this);
 
         String basepath = new File("").getAbsolutePath();
 
@@ -138,6 +138,7 @@ public class Player extends Sprite {
     private void handleHorizontalCollision() {
 
         Projectile p = new Projectile(1, 1, false, 0, 0,0,this);
+        Weapon w = new Weapon(0,0,0,0,0,0,0,0,0);
 
         boolean goingRight = false;
 
@@ -148,16 +149,29 @@ public class Player extends Sprite {
         Rectangle left = new Rectangle((int) (hitBox.x + xVel), hitBox.y, hitBox.width, hitBox.height);
         Rectangle right = new Rectangle((int) Math.ceil(hitBox.x + xVel), hitBox.y, hitBox.width, hitBox.height);
         for (Sprite element : gameState.sprites) {
-            if (goingRight && element.getClass() != p.getClass() && !element.equals(this) && element.hitBox.intersects(right)) {
+            if (goingRight && element.getClass() != p.getClass() && !element.equals(this) && element.hitBox.intersects(right)
+                    && element.getClass() != w.getClass()) {
                 xVel = 0;
                 xLoc = element.hitBox.x - width;
                 hitBox.x = xLoc;
                 break;
-            } else if (!goingRight && element.getClass() != p.getClass() && !element.equals(this) && element.hitBox.intersects(left)) {
+            } else if (!goingRight && element.getClass() != p.getClass() && !element.equals(this) && element.hitBox.intersects(left)
+                    && element.getClass() != w.getClass()) {
                 xVel = 0;
                 xLoc = element.hitBox.x + element.hitBox.width;
                 hitBox.x = xLoc;
                 break;
+            }
+
+            if (element.hitBox.intersects(hitBox) && element.getClass() == w.getClass()) {
+                Weapon temp = (Weapon) element;
+                if (!temp.hasOwner()) {
+                    gameState.toDelete.add(weapon);
+                    weapon.setAmmo(0);
+                    weapon = temp;
+                    temp.setPlayer(this);
+                    temp.setHasOwner();
+                }
             }
         }
     }
@@ -165,6 +179,7 @@ public class Player extends Sprite {
     private void handleVerticalCollisions() {
 
         Projectile p = new Projectile(1, 1, false, 0, 0, 0,this);
+        Weapon w = new Weapon(0,0,0,0,0,0,0,0,0);
 
         boolean goingDown = false;
 
@@ -174,7 +189,7 @@ public class Player extends Sprite {
         Rectangle temp = new Rectangle(hitBox.x, (int) (hitBox.y + yVel), hitBox.width, hitBox.height);
         for (Sprite element : gameState.sprites) {
             if (element.hitBox.intersects(temp)) {
-                if (element.getClass() != p.getClass() && !element.equals(this)) {
+                if (element.getClass() != p.getClass() && !element.equals(this) && element.getClass() != w.getClass()) {
                     if (goingDown) {
                         yLoc = element.hitBox.y - hitBox.height;
                         hitBox.y = yLoc;
