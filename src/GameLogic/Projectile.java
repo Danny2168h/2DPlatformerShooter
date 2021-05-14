@@ -15,16 +15,22 @@ public class Projectile extends Sprite{
 
     private final boolean direction;
 
+    private final double knockBack;
+
+    private final double bulletSpeed;
+
     //true is positive (right), false is negative (left)
-    public Projectile(int x, int y, boolean direction, int damage, Player player) { //boolean determines which player projectile belongs to
+    public Projectile(int x, int y, boolean direction, int damage, double knockBack, double bulletSpeed, Player player) { //boolean determines which player projectile belongs to
         super(x,y, 15, 10);
+        this.knockBack = knockBack;
         this.player = player;
         this.damage = damage;
         this.direction = direction;
+        this.bulletSpeed = bulletSpeed;
         if (direction) {
-            xVel = 10;
+            xVel = bulletSpeed;
         } else {
-            xVel = -10;
+            xVel = bulletSpeed * -1;
         }
         String basepath = new File("").getAbsolutePath();
         try {
@@ -44,8 +50,6 @@ public class Projectile extends Sprite{
 
     private void handleCollision() {
 
-        double force = 7.0; // for knockback
-
         for (Sprite element : gameState.sprites) {
             if (element.hitBox.intersects(hitBox)) {
                 if (!element.equals(this) && element.getClass() != this.getClass() && player.equals(gameState.player1) && !element.equals(gameState.player1)) {
@@ -55,9 +59,9 @@ public class Projectile extends Sprite{
                         gameState.player2.takeDamage(damage);
                         gameState.healthUpdate();
                         if (direction) {
-                            gameState.player2.knockBack(force);
+                            gameState.player2.knockBack(knockBack);
                         } else {
-                            gameState.player2.knockBack(force * -1);
+                            gameState.player2.knockBack(knockBack * -1);
                         }
                     }
                 } else if (!element.equals(this) && element.getClass() != this.getClass() && player.equals(gameState.player2) && !element.equals(gameState.player2)) {
@@ -67,9 +71,9 @@ public class Projectile extends Sprite{
                         gameState.player1.takeDamage(damage);
                         gameState.healthUpdate();
                         if (direction) {
-                            gameState.player1.knockBack(force);
+                            gameState.player1.knockBack(knockBack);
                         } else {
-                            gameState.player1.knockBack(force * -1);
+                            gameState.player1.knockBack(knockBack * -1);
                         }
                     }
                 }

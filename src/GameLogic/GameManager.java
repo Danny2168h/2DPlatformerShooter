@@ -65,7 +65,7 @@ public class GameManager {
     }
 
     public void ammoUpdate() {
-        gameWindow.updateAmmo(player1.ammo, player2.ammo);
+        gameWindow.updateAmmo(player1.getWeapon().getAmmo(), player2.getWeapon().getAmmo());
     }
 
     public void keyPressed(KeyEvent e) {
@@ -92,10 +92,10 @@ public class GameManager {
             player2.direction = true;
         }
         if (e.getKeyChar() == 'j') {
-            player1.shoot = true;
+            player1.getWeapon().shoot();
         }
         if (e.getKeyChar() == '2') {
-            player2.shoot = true;
+            player2.getWeapon().shoot();
         }
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             gameWindow.pressEsc();
@@ -123,11 +123,11 @@ public class GameManager {
             player2.keyRight = false;
         }
         if (e.getKeyChar() == 'j') {
-            player1.shoot = false;
+            player1.getWeapon().noShoot();
         }
 
         if (e.getKeyChar() == '2') {
-            player2.shoot = false;
+            player2.getWeapon().noShoot();
         }
     }
 
@@ -160,42 +160,4 @@ public class GameManager {
             player2.keyRight = false;
         }
     }
-
-    //    private void projectileHandler() {
-//        if (counter1 != 0) {
-//            counter1--;
-//        }
-//
-//        if (counter2 != 0) {
-//            counter2--;
-//        }
-//
-//        if (playerShoot1 && counter1 == 0 && player1.ammo > 0 && player1.HP > 0) {
-//            Projectile projectile;
-//            if (player1.direction) {
-//                projectile = new Projectile(player1.xLoc + player1.width,
-//                        player1.yLoc + player1.height / 2, true, 10, true);
-//            } else {
-//                projectile = new Projectile(player1.xLoc,
-//                        player1.yLoc + player1.height / 2, false, 10, true);
-//            }
-//            sprites.add(projectile);
-//            counter1 = COOLDOWN;
-//            player1.ammo--;
-//        }
-//
-//        if (playerShoot2 && counter2 == 0 && player2.ammo > 0 && player2 .HP > 0) {
-//            Projectile projectile;
-//            if (player2.direction) {
-//                projectile = new Projectile(player2.xLoc + player2.width,
-//                        player2.yLoc + player2.height / 2, true, 10, false);
-//            } else {
-//                projectile = new Projectile(player2.xLoc,
-//                        player2.yLoc + player2.height / 2, false, 10, false);
-//            }
-//            sprites.add(projectile);
-//            counter2 = COOLDOWN;
-//            player2.ammo--;
-//        }
-//    }
 }
