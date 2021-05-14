@@ -155,6 +155,10 @@ public class GameWindow extends JFrame {
         if (con3 != null) {
             con3.add(healthBar1);
         }
+        con2.add(ammoBar);
+        if(con4 != null) {
+            con4.add(ammoBar1);
+        }
         this.remove(escape);
         // escape = null;
         this.repaint();
@@ -177,7 +181,9 @@ public class GameWindow extends JFrame {
 
     public void updateAmmo(int ammo, int ammo1) {
         ammoCount.setText(Integer.toString(ammo));
-        ammoCount1.setText(Integer.toString(ammo1));
+        if(ammoCount1 != null) {
+            ammoCount1.setText(Integer.toString(ammo1));
+        }
     }
 
     private void playerWon(boolean s) {

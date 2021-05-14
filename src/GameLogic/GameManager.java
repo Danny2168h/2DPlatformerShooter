@@ -65,7 +65,11 @@ public class GameManager {
     }
 
     public void ammoUpdate() {
-        gameWindow.updateAmmo(player1.getWeapon().getAmmo(), player2.getWeapon().getAmmo());
+        if (player2 == null) {
+            gameWindow.updateAmmo(player1.getWeapon().getAmmo(), 0);
+        } else {
+            gameWindow.updateAmmo(player1.getWeapon().getAmmo(), player2.getWeapon().getAmmo());
+        }
     }
 
     public void keyPressed(KeyEvent e) {
