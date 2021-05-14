@@ -34,7 +34,7 @@ public class Player extends Sprite {
 
         super(x, y, width, height);
 
-        weapon = new Weapon(0,0, 20, 4, 5.0, 100, 10.0, 5, 5, this);
+        weapon = new Weapon(20, 4, 5.0, 100, 10.0, 5, 5, this);
 
         String basepath = new File("").getAbsolutePath();
 
@@ -165,10 +165,13 @@ public class Player extends Sprite {
 
             if (element.hitBox.intersects(hitBox) && element.getClass() == w.getClass()) {
                 Weapon temp = (Weapon) element;
-                //weapon.setPlayer(null);
-                gameState.toDelete.add(weapon);
-                temp.setPlayer(this);
-                weapon = temp;
+                if (!temp.hasOwner()) {
+                    gameState.toDelete.add(weapon);
+                    weapon.setAmmo(0);
+                    weapon = temp;
+                    temp.setPlayer(this);
+                    temp.setHasOwner();
+                }
             }
         }
     }
