@@ -13,8 +13,6 @@ public class Player extends Sprite {
     public boolean keyDown = false;
     public boolean shoot = false;
 
-    public int ammo = 700;
-
     public boolean direction = true; //true is right, false is left
 
     private boolean touchingGround = false;
@@ -23,13 +21,20 @@ public class Player extends Sprite {
 
     public int HP = 100;
 
-    public int counter;
+    private Weapon weapon;
 
-    public int coolDown = 5;
+    private boolean addedWeapon = false;
+
+  //  public int coolDown = 5;
+   // public int counter;
+  //  public int ammo = 800;
+
 
     public Player(int x, int y, int width, int height) {
 
         super(x, y, width, height);
+
+        weapon = new Weapon(0,0, 20, 4, 5.0, 100, 10.0, 5, 5, this);
 
         String basepath = new File("").getAbsolutePath();
 
@@ -44,6 +49,11 @@ public class Player extends Sprite {
 
         gameState = manager;
 
+        if(!addedWeapon) {
+            addedWeapon = true;
+            gameState.toAdd.add(weapon);
+        }
+
         if (HP <= 0) {
             gameState.toDelete.add(this);
         }
@@ -53,7 +63,7 @@ public class Player extends Sprite {
         UpDownMovement();
         LeftRightMovement();
 
-        projectileHandler();
+        //projectileHandler();
 
         if (xVel > 0) {
             xLoc = (int) Math.ceil(xLoc + xVel); //java cast from int to double means that positive additions lose values after decimal point
@@ -73,13 +83,6 @@ public class Player extends Sprite {
         //g.fillRect(xLoc, yLoc, width, height);
 
         g.drawImage(image, xLoc, yLoc, width, height, null);
-        g.setColor(Color.black);
-        if (direction) {
-            g.fillRect(xLoc + 6*width/8, yLoc + height/3, 20, 3 );
-        } else {
-            g.fillRect(xLoc - 6*width/8, yLoc + height/3, 20, 3 );
-        }
-
     }
 
     private void LeftRightMovement() { //smooth movement
@@ -129,33 +132,12 @@ public class Player extends Sprite {
     }
 
 
-    private void projectileHandler() {
-       if (counter != 0) {
-           counter--;
-       }
-
-        if (shoot && counter == 0 && ammo > 0 && HP > 0) {
-            Projectile projectile;
-            if (direction) {
-                projectile = new Projectile(xLoc + width,
-                        yLoc + height / 2, true, 5, this);
-            } else {
-                projectile = new Projectile(xLoc,
-                        yLoc + height / 2, false, 5, this);
-            }
-            gameState.toAdd.add(projectile);
-            counter = coolDown;
-            ammo--;
-            gameState.ammoUpdate();
-        }
-    }
-
     //check if it will collide rather than dealing with collisions after colliding, if we check after it collides it is
     // ambiguous as to which dimensions collisions handler we should use
 
     private void handleHorizontalCollision() {
 
-        Projectile p = new Projectile(1, 1, false, 0, this);
+        Projectile p = new Projectile(1, 1, false, 0, 0,0,this);
 
         boolean goingRight = false;
 
@@ -182,7 +164,7 @@ public class Player extends Sprite {
 
     private void handleVerticalCollisions() {
 
-        Projectile p = new Projectile(1, 1, false, 0, this);
+        Projectile p = new Projectile(1, 1, false, 0, 0, 0,this);
 
         boolean goingDown = false;
 
@@ -218,4 +200,46 @@ public class Player extends Sprite {
     public void knockBack(double force) {
         xVel += force;
     }
+
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
+    }
+
+    public boolean getDirection() {
+        return direction;
+    }
+
+    public int getHP() {
+        return HP;
+    }
+
+    public void refreshedWeapon() {
+        addedWeapon = false;
+    }
+
+    //    private void projectileHandler() {
+//       if (counter != 0) {
+//           counter--;
+//       }
+//
+//        if (shoot && counter == 0 && ammo > 0 && HP > 0) {
+//            Projectile projectile;
+//            if (direction) {
+//                projectile = new Projectile(xLoc + width,
+//                        yLoc + height / 2, true, 5, 7, 10, this);
+//            } else {
+//                projectile = new Projectile(xLoc,
+//                        yLoc + height / 2, false, 5, 7,10, this);
+//            }
+//            gameState.toAdd.add(projectile);
+//            counter = coolDown;
+//            ammo--;
+//            gameState.ammoUpdate();
+//        }
+//    }
+
 }
