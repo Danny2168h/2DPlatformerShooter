@@ -50,6 +50,8 @@ public class Weapon extends Sprite {
         }
     }
 
+
+    //need to modify projectile spawns to better
     private void projectileHandler() {
         if (counter != 0) {
             counter--;
@@ -82,10 +84,9 @@ public class Weapon extends Sprite {
                     gameState.toDelete.add(temp.getWeapon());
                     temp.getWeapon().removePlayer();
                     temp.setWeapon(this);
-                    temp.refreshedWeapon();
+                    //temp.refreshedWeapon(); // may not need to add weapon second time since it is already in the update list
                     player = temp;
                     }
-
                 }
             }
         }
@@ -100,6 +101,9 @@ public class Weapon extends Sprite {
         if (player == null) {
             g.fillRect(xLoc, yLoc, 20, 20);
         } else {
+            if (damage == 50) {
+                System.out.println("rendering weapon");
+            }
             g.setColor(Color.black);
             if (player.getDirection()) {
                 g.fillRect(player.getxLoc() + 6*player.getWidth()/8, player.getyLoc() + player.getHeight()/2, width, height);
@@ -121,5 +125,9 @@ public class Weapon extends Sprite {
 
     public void noShoot() {
         shoot = false;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }
