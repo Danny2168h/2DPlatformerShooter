@@ -48,7 +48,7 @@ public class Player extends Sprite {
             gameState.toDelete.add(this);
         }
 
-        yVel += 1.5;
+        yVel += 1;
         //movement handlers also handle collisions
         UpDownMovement();
         LeftRightMovement();
@@ -82,6 +82,53 @@ public class Player extends Sprite {
 
     }
 
+    private void LeftRightMovement() { //smooth movement
+        if (keyLeft && keyRight || !keyLeft && !keyRight) {
+            xVel *= 0.75;
+        } else if (keyLeft && !keyRight) {
+            xVel -= 0.5;
+        } else if (keyRight && !keyLeft) {
+            xVel += 0.5;
+        }
+        handleHorizontalCollision();
+        horizontalLimiters();
+    }
+
+    //caps speed in horizontal directions
+    private void horizontalLimiters() {
+        if (xVel < 0.50 && xVel > 0) {
+            xVel = 0;
+        }
+        if (xVel > -0.50 && xVel < 0) {
+            xVel = 0;
+        }
+        if (xVel > 6) {
+            xVel = 6;
+        }
+        if (xVel < -6)
+            xVel = -6;
+    }
+
+    private void UpDownMovement() {
+        if (keyUp && keyDown || !keyUp && !keyDown) {
+            // do nothing
+        } else if (keyUp && !keyDown && touchingGround) {
+            yVel -= 13;
+            touchingGround = false;
+        } else if (keyDown && !keyUp) {
+            yVel += 0.8;
+        }
+        handleVerticalCollisions();
+        verticalLimiters();
+    }
+
+    private void verticalLimiters() {
+        if (yVel >= 9) {
+            yVel = 9;
+        }
+    }
+
+
     private void projectileHandler() {
        if (counter != 0) {
            counter--;
@@ -89,17 +136,17 @@ public class Player extends Sprite {
 
         if (shoot && counter == 0 && ammo > 0 && HP > 0) {
             Projectile projectile;
-            System.out.println("shooting");
             if (direction) {
                 projectile = new Projectile(xLoc + width,
-                        yLoc + height / 2, true, 10, this);
+                        yLoc + height / 2, true, 5, this);
             } else {
                 projectile = new Projectile(xLoc,
-                        yLoc + height / 2, false, 10, this);
+                        yLoc + height / 2, false, 5, this);
             }
             gameState.toAdd.add(projectile);
             counter = coolDown;
             ammo--;
+            gameState.ammoUpdate();
         }
     }
 
@@ -160,52 +207,6 @@ public class Player extends Sprite {
                     }
                 }
             }
-        }
-    }
-
-    private void LeftRightMovement() { //smooth movement
-        if (keyLeft && keyRight || !keyLeft && !keyRight) {
-            xVel *= 0.75;
-        } else if (keyLeft && !keyRight) {
-            xVel -= 0.5;
-        } else if (keyRight && !keyLeft) {
-            xVel += 0.5;
-        }
-        handleHorizontalCollision();
-        horizontalLimiters();
-    }
-
-    //caps speed in horizontal directions
-    private void horizontalLimiters() {
-        if (xVel < 0.50 && xVel > 0) {
-            xVel = 0;
-        }
-        if (xVel > -0.50 && xVel < 0) {
-            xVel = 0;
-        }
-        if (xVel > 6) {
-            xVel = 6;
-        }
-        if (xVel < -6)
-            xVel = -6;
-    }
-
-    private void UpDownMovement() {
-        if (keyUp && keyDown || !keyUp && !keyDown) {
-            // do nothing
-        } else if (keyUp && !keyDown && touchingGround) {
-            yVel -= 15;
-            touchingGround = false;
-        } else if (keyDown && !keyUp) {
-            yVel += 0.8;
-        }
-        handleVerticalCollisions();
-        verticalLimiters();
-    }
-
-    private void verticalLimiters() {
-        if (yVel >= 9) {
-            yVel = 9;
         }
     }
 

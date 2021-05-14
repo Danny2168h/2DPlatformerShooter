@@ -24,6 +24,12 @@ public class GameWindow extends JFrame {
     private JPanel healthBar1;
     private JProgressBar healthPro1;
 
+    private JPanel ammoBar;
+    private JLabel ammoCount;
+
+    private JPanel ammoBar1;
+    private JLabel ammoCount1;
+
     public GameWindow() {
         this.setTitle(TITLE);
 
@@ -47,9 +53,11 @@ public class GameWindow extends JFrame {
         if (s) {
             gameLoop = new GameLoop(true, this);
             setUpCon(true);
+            setupAmmo(true);
         } else {
             gameLoop = new GameLoop(false, this);
             setUpCon(false);
+            setupAmmo(false);
         }
         this.add(gameLoop);
         this.setVisible(true);
@@ -71,6 +79,8 @@ public class GameWindow extends JFrame {
         healthPro.setStringPainted(true);
         healthBar.add(healthPro);
 
+        con3 = null;
+
         if(s == false) {
             con3 = this.getContentPane();
             healthBar1 = new JPanel();
@@ -83,6 +93,34 @@ public class GameWindow extends JFrame {
             healthPro1.setValue(100);
             healthPro1.setStringPainted(true);
             healthBar1.add(healthPro1);
+        }
+    }
+
+    private void setupAmmo(boolean b) {
+        con2 = this.getContentPane();
+        ammoBar = new JPanel();
+        ammoBar.setBounds(10,40,100,20);
+        ammoBar.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        con2.add(ammoBar);
+
+        ammoCount = new JLabel();
+        ammoCount.setSize(new Dimension(100,20));
+        ammoCount.setText("100");
+        ammoBar.add(ammoCount);
+
+        con4 = null;
+
+        if(b == false) {
+            con4 = this.getContentPane();
+            ammoBar1 = new JPanel();
+            ammoBar1.setBounds(515,40,100,20);
+            ammoBar1.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+            con4.add(ammoBar1);
+
+            ammoCount1 = new JLabel();
+            ammoCount1.setSize(new Dimension(100,20));
+            ammoCount1.setText("100");
+            ammoBar1.add(ammoCount1);
         }
     }
 
@@ -114,7 +152,7 @@ public class GameWindow extends JFrame {
 
     public void resumeGame() {
         con1.add(healthBar);
-        if (healthBar != null) {
+        if (con3 != null) {
             con3.add(healthBar1);
         }
         this.remove(escape);
@@ -138,6 +176,8 @@ public class GameWindow extends JFrame {
     }
 
     public void updateAmmo(int ammo, int ammo1) {
+        ammoCount.setText(Integer.toString(ammo));
+        ammoCount1.setText(Integer.toString(ammo1));
     }
 
     private void playerWon(boolean s) {

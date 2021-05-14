@@ -49,7 +49,7 @@ public class GameLoop extends Canvas implements Runnable {
         gameManager.addSprite(new Boundary(0,0, 1, HEIGHT));
         gameManager.addSprite(new Boundary(WIDTH - 50, 0, 1, HEIGHT));
 
-        gameManager.addSprite(new Platform(300, 200, WALL_WIDTH, WALL_HEIGHT));
+        gameManager.addSprite(new Platform(300, 220, WALL_WIDTH, WALL_HEIGHT));
         gameManager.addSprite(new Platform(180, 290, WALL_WIDTH, WALL_HEIGHT));
         gameManager.addSprite(new Platform(400, 320, WALL_WIDTH, WALL_HEIGHT));
 
