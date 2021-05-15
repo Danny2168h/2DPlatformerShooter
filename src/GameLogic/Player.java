@@ -25,8 +25,8 @@ public class Player extends Sprite {
 
     private boolean addedWeapon = false;
 
-    private double maxXSpeed = 6;
-    private static final double ACCELERATION = 0.5;
+    private double maxXSpeed = 5;
+    private static final double ACCELERATION = 0.75;
     private static final double JUMP_VELOCITY = 13;
 
   //  public int coolDown = 5;
@@ -63,6 +63,14 @@ public class Player extends Sprite {
             gameState.toDelete.add(this);
         }
 
+        if (xVel > maxXSpeed) {
+            System.out.println(xVel + "   " + maxXSpeed);
+        }
+
+        if (xVel < -1 * maxXSpeed) {
+            System.out.println(xVel + "   " + maxXSpeed);
+        }
+
         yVel += 1;
         //movement handlers also handle collisions
         UpDownMovement();
@@ -92,11 +100,15 @@ public class Player extends Sprite {
 
     private void LeftRightMovement() { //smooth movement
         if (keyLeft && keyRight || !keyLeft && !keyRight) {
-            xVel *= 0.75;
+            if (xVel > 0) {
+                xVel -= 0.75;
+            } else if (xVel < 0){
+                xVel += 0.75;
+            }
         } else if (keyLeft && !keyRight) {
-            xVel -= ACCELERATION;
+                xVel -= ACCELERATION;
         } else if (keyRight && !keyLeft) {
-            xVel += ACCELERATION;
+                xVel += ACCELERATION;
         }
         handleHorizontalCollision();
         horizontalLimiters();
@@ -110,10 +122,10 @@ public class Player extends Sprite {
         if (xVel > -1 * ACCELERATION && xVel < 0) {
             xVel = 0;
         }
-        if (xVel > maxXSpeed && xVel <= maxXSpeed + ACCELERATION) {
+        if (xVel > maxXSpeed && xVel <= 7 + ACCELERATION) {  //7 should be max speed player should ever move, values above this are considered knock back amounts
             xVel = maxXSpeed;
         }
-        if (xVel < -1 * maxXSpeed && xVel >= -(maxXSpeed + ACCELERATION)) {
+        if (xVel < -1 * maxXSpeed && xVel >= -7 - ACCELERATION) {
             xVel = -1 * maxXSpeed;
         }
     }
@@ -162,13 +174,11 @@ public class Player extends Sprite {
                 xVel = 0;
                 xLoc = element.hitBox.x - width;
                 hitBox.x = xLoc;
-                break;
             } else if (!goingRight && element.getClass() != p.getClass() && !element.equals(this) && element.hitBox.intersects(left)
                     && element.getClass() != w.getClass() && element.getClass() != h.getClass()) {
                 xVel = 0;
                 xLoc = element.hitBox.x + element.hitBox.width;
                 hitBox.x = xLoc;
-                break;
             }
 
             if (element.hitBox.intersects(hitBox) && element.getClass() == w.getClass()) {
