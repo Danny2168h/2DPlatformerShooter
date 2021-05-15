@@ -162,13 +162,11 @@ public class Player extends Sprite {
                 xVel = 0;
                 xLoc = element.hitBox.x - width;
                 hitBox.x = xLoc;
-                break;
             } else if (!goingRight && element.getClass() != p.getClass() && !element.equals(this) && element.hitBox.intersects(left)
                     && element.getClass() != w.getClass() && element.getClass() != h.getClass()) {
                 xVel = 0;
                 xLoc = element.hitBox.x + element.hitBox.width;
                 hitBox.x = xLoc;
-                break;
             }
 
             if (element.hitBox.intersects(hitBox) && element.getClass() == w.getClass()) {
