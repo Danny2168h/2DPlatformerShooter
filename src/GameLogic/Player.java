@@ -58,6 +58,8 @@ public class Player extends Sprite {
             gameState.toAdd.add(weapon);
         }
 
+        gameState.healthUpdate();
+
         if (HP <= 0) {
             gameState.toDelete.add(this);
         }
@@ -144,6 +146,7 @@ public class Player extends Sprite {
 
         Projectile p = new Projectile(1, 1, false, 0, 0,0,this);
         Weapon w = new Weapon(0,0,0,0,0,0,0,0,this,0);
+        HealthPack h = new HealthPack(0,0,0,0);
 
         boolean goingRight = false;
 
@@ -155,13 +158,13 @@ public class Player extends Sprite {
         Rectangle right = new Rectangle((int) Math.ceil(hitBox.x + xVel), hitBox.y, hitBox.width, hitBox.height);
         for (Sprite element : gameState.sprites) {
             if (goingRight && element.getClass() != p.getClass() && !element.equals(this) && element.hitBox.intersects(right)
-                    && element.getClass() != w.getClass()) {
+                    && element.getClass() != w.getClass() && element.getClass() != h.getClass()) {
                 xVel = 0;
                 xLoc = element.hitBox.x - width;
                 hitBox.x = xLoc;
                 break;
             } else if (!goingRight && element.getClass() != p.getClass() && !element.equals(this) && element.hitBox.intersects(left)
-                    && element.getClass() != w.getClass()) {
+                    && element.getClass() != w.getClass() && element.getClass() != h.getClass()) {
                 xVel = 0;
                 xLoc = element.hitBox.x + element.hitBox.width;
                 hitBox.x = xLoc;
@@ -177,6 +180,15 @@ public class Player extends Sprite {
                     temp.setPlayer(this);
                     temp.setHasOwner();
                     maxXSpeed = temp.getMaxSpeed();
+                }
+            }
+
+            if (element.hitBox.intersects(hitBox) && element.getClass() == h.getClass()) {
+                HealthPack temp = (HealthPack) element;
+                gameState.toDelete.add(element);
+                HP += temp.getHp();
+                if (HP > 100) {
+                    HP = 100;
                 }
             }
         }

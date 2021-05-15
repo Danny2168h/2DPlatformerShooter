@@ -54,7 +54,7 @@ public class Projectile extends Sprite{
                     gameState.toDelete.add(this);
                     if (element.equals(gameState.player2)) {
                         gameState.player2.takeDamage(damage);
-                        gameState.healthUpdate();
+                        //gameState.healthUpdate();
                         if (direction) {
                             gameState.player2.knockBack(knockBack);
                         } else {
@@ -66,7 +66,7 @@ public class Projectile extends Sprite{
                     gameState.toDelete.add(this);
                     if (element.equals(gameState.player1)) {
                         gameState.player1.takeDamage(damage);
-                        gameState.healthUpdate();
+                        //gameState.healthUpdate();
                         if (direction) {
                             gameState.player1.knockBack(knockBack);
                         } else {
