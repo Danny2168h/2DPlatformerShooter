@@ -13,11 +13,11 @@ public class HealthPack extends Sprite{
         super(x, y, width, height);
         heal = 20;
         String basepath = new File("").getAbsolutePath();
-//        try {
-//            image = ImageIO.read(new File(basepath + "\\src\\Resources\\health-pack-png-4.png"));
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
+        try {
+            image = ImageIO.read(new File(basepath + "\\src\\Resources\\healthPack.jpg"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public HealthPack() {
@@ -30,8 +30,7 @@ public class HealthPack extends Sprite{
 
     @Override
     public void render(Graphics g) {
-            g.setColor(Color.red);
-            g.fillRect(xLoc,yLoc,width,height);
+            g.drawImage(image, xLoc,yLoc,width,height,null);
     }
 
     public int getHp() {
