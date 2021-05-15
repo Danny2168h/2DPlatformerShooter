@@ -9,13 +9,13 @@ public class Projectile extends Sprite{
 
     private GameManager gameState;
 
-    private final int damage;
+    private int damage;
 
-    private final Player player;
+    private Player player;
 
-    private final boolean direction;
+    private boolean direction;
 
-    private final double knockBack;
+    private double knockBack;
 
     //true is positive (right), false is negative (left)
     public Projectile(int x, int y, boolean direction, int damage, double knockBack, double bulletSpeed, Player player) { //boolean determines which player projectile belongs to
@@ -35,6 +35,10 @@ public class Projectile extends Sprite{
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public Projectile() {
+        super(0,0,0,0);
     }
 
     @Override

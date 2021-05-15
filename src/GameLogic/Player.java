@@ -25,6 +25,10 @@ public class Player extends Sprite {
 
     private boolean addedWeapon = false;
 
+    private double maxXSpeed = 6;
+    private static final double ACCELERATION = 0.5;
+    private static final double JUMP_VELOCITY = 13;
+
   //  public int coolDown = 5;
    // public int counter;
   //  public int ammo = 800;
@@ -34,7 +38,7 @@ public class Player extends Sprite {
 
         super(x, y, width, height);
 
-        weapon = new Weapon(0,0, 20, 4, 5.0, 100, 10.0, 5, 5, this);
+        weapon = new Weapon(0,20, 4, 2, 100, 10.0, 5, 5, this, 6);
 
         String basepath = new File("").getAbsolutePath();
 
@@ -44,6 +48,7 @@ public class Player extends Sprite {
             ex.printStackTrace();
         }
     }
+
 
     public void update(GameManager manager) {
 
@@ -89,9 +94,9 @@ public class Player extends Sprite {
         if (keyLeft && keyRight || !keyLeft && !keyRight) {
             xVel *= 0.75;
         } else if (keyLeft && !keyRight) {
-            xVel -= 0.5;
+            xVel -= ACCELERATION;
         } else if (keyRight && !keyLeft) {
-            xVel += 0.5;
+            xVel += ACCELERATION;
         }
         handleHorizontalCollision();
         horizontalLimiters();
@@ -99,24 +104,25 @@ public class Player extends Sprite {
 
     //caps speed in horizontal directions
     private void horizontalLimiters() {
-        if (xVel < 0.50 && xVel > 0) {
+        if (xVel < ACCELERATION && xVel > 0) {
             xVel = 0;
         }
-        if (xVel > -0.50 && xVel < 0) {
+        if (xVel > -1 * ACCELERATION && xVel < 0) {
             xVel = 0;
         }
-        if (xVel > 6) {
-            xVel = 6;
+        if (xVel > maxXSpeed && xVel <= maxXSpeed + ACCELERATION) {
+            xVel = maxXSpeed;
         }
-        if (xVel < -6)
-            xVel = -6;
+        if (xVel < -1 * maxXSpeed && xVel >= -(maxXSpeed + ACCELERATION)) {
+            xVel = -1 * maxXSpeed;
+        }
     }
 
     private void UpDownMovement() {
         if (keyUp && keyDown || !keyUp && !keyDown) {
             // do nothing
         } else if (keyUp && !keyDown && touchingGround) {
-            yVel -= 13;
+            yVel -= JUMP_VELOCITY;
             touchingGround = false;
         } else if (keyDown && !keyUp) {
             yVel += 0.8;
@@ -135,9 +141,12 @@ public class Player extends Sprite {
     //check if it will collide rather than dealing with collisions after colliding, if we check after it collides it is
     // ambiguous as to which dimensions collisions handler we should use
 
+    //method also handles interactions with items that player can pick up
     private void handleHorizontalCollision() {
 
-        Projectile p = new Projectile(1, 1, false, 0, 0,0,this);
+        Projectile p = new Projectile();
+        Weapon w = new Weapon();
+        HealthPack h = new HealthPack();
 
         boolean goingRight = false;
 
@@ -148,23 +157,49 @@ public class Player extends Sprite {
         Rectangle left = new Rectangle((int) (hitBox.x + xVel), hitBox.y, hitBox.width, hitBox.height);
         Rectangle right = new Rectangle((int) Math.ceil(hitBox.x + xVel), hitBox.y, hitBox.width, hitBox.height);
         for (Sprite element : gameState.sprites) {
-            if (goingRight && element.getClass() != p.getClass() && !element.equals(this) && element.hitBox.intersects(right)) {
+            if (goingRight && element.getClass() != p.getClass() && !element.equals(this) && element.hitBox.intersects(right)
+                    && element.getClass() != w.getClass() && element.getClass() != h.getClass()) {
                 xVel = 0;
                 xLoc = element.hitBox.x - width;
                 hitBox.x = xLoc;
                 break;
-            } else if (!goingRight && element.getClass() != p.getClass() && !element.equals(this) && element.hitBox.intersects(left)) {
+            } else if (!goingRight && element.getClass() != p.getClass() && !element.equals(this) && element.hitBox.intersects(left)
+                    && element.getClass() != w.getClass() && element.getClass() != h.getClass()) {
                 xVel = 0;
                 xLoc = element.hitBox.x + element.hitBox.width;
                 hitBox.x = xLoc;
                 break;
+            }
+
+            if (element.hitBox.intersects(hitBox) && element.getClass() == w.getClass()) {
+                Weapon temp = (Weapon) element;
+                if (!temp.hasOwner()) {
+                    gameState.toDelete.add(weapon);
+                    weapon.setAmmo(0);
+                    weapon = temp;
+                    temp.setPlayer(this);
+                    temp.setHasOwner();
+                    maxXSpeed = temp.getMaxSpeed();
+                }
+            }
+
+            if (element.hitBox.intersects(hitBox) && element.getClass() == h.getClass()) {
+                HealthPack temp = (HealthPack) element;
+                gameState.toDelete.add(element);
+                HP += temp.getHp();
+                if (HP > 100) {
+                    HP = 100;
+                }
+                gameState.healthUpdate();
             }
         }
     }
 
     private void handleVerticalCollisions() {
 
-        Projectile p = new Projectile(1, 1, false, 0, 0, 0,this);
+        Projectile p = new Projectile();
+        Weapon w = new Weapon();
+        HealthPack h = new HealthPack();
 
         boolean goingDown = false;
 
@@ -174,7 +209,8 @@ public class Player extends Sprite {
         Rectangle temp = new Rectangle(hitBox.x, (int) (hitBox.y + yVel), hitBox.width, hitBox.height);
         for (Sprite element : gameState.sprites) {
             if (element.hitBox.intersects(temp)) {
-                if (element.getClass() != p.getClass() && !element.equals(this)) {
+                if (element.getClass() != p.getClass() && !element.equals(this) && element.getClass() != w.getClass()
+                        && element.getClass() != h.getClass()) {
                     if (goingDown) {
                         yLoc = element.hitBox.y - hitBox.height;
                         hitBox.y = yLoc;
