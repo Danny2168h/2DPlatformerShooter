@@ -21,7 +21,7 @@ public class mainMenuPanel extends JPanel {
         buttonInitiation();
         buttonLayout();
         String basepath = new File("").getAbsolutePath();
-        backgroundImage = new ImageIcon(basepath + "\\src\\Resources\\background.jpg");
+        backgroundImage = new ImageIcon(basepath + "/src/Resources/background.jpg");
         JLabel background = new JLabel(backgroundImage);
         background.setSize(700,500);
         this.add(background);

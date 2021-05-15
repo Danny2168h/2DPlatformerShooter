@@ -39,7 +39,7 @@ public class Player extends Sprite {
         String basepath = new File("").getAbsolutePath();
 
         try {
-            image = ImageIO.read(new File(basepath + "\\src\\Resources\\mokey.jpg"));
+            image = ImageIO.read(new File(basepath + "/src/Resources/mokey.jpg"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -230,6 +230,14 @@ public class Player extends Sprite {
 
     public int getHP() {
         return HP;
+    }
+
+    public void random_move_left(int num){
+        xVel -= num;
+    }
+
+    public void random_move_right (int num) {
+        xVel += num;
     }
 
     public void refreshedWeapon() {

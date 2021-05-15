@@ -8,11 +8,15 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 public class GameLoop extends Canvas implements Runnable {
 
     private static final int WIDTH = 640;
     private static final int HEIGHT = WIDTH / 12 * 9;
+    public static final Random RND = new Random();
+    Player p = new Player(RND.nextInt(WIDTH), RND.nextInt(30), 20, 40);
+
 
     private int updateNum;
 
@@ -30,6 +34,7 @@ public class GameLoop extends Canvas implements Runnable {
         gameManager = new GameManager(gameWindow);
         if (s) {
             gameManager.addPlayer1(new Player(30, 30, 20, 40));
+            //addBot();
         } else {
             gameManager.addPlayer1(new Player(30, 30, 20, 40));
             gameManager.addPlayer2(new Player(100, 100, 20, 40));
@@ -38,6 +43,40 @@ public class GameLoop extends Canvas implements Runnable {
         this.addKeyListener(new KeyHandler(gameManager));
         //new UI.GameWindow(WIDTH, HEIGHT, TITLE, this);
     }
+
+    // Invade!
+    // modifies: this
+    // effects: randomly generates new enemy on the frame.
+    private void addBot() {
+        long timer = System.currentTimeMillis();
+        if (timer % 2 == 0 ) {
+
+            //random movement of the bot
+//            boolean dir = RND.nextBoolean();
+//            if (dir) {
+//                p.random_move_left(RND.nextInt(20));
+//            } else {
+//                p.random_move_right(RND.nextInt(20));
+//            }
+//            gameManager.sprites.add(p);
+        }
+
+
+    }
+
+    private void item_drop() {
+        long timer = System.currentTimeMillis();
+        if (timer % (RND.nextInt(10) +500) ==0) {
+            Weapon gun = new Weapon(RND.nextInt(WIDTH), 500 , 30, 8, 10, 5, 15, 50, 20);
+            gameManager.sprites.add(gun);
+        }
+    }
+
+
+
+
+
+
 
     private void setUpGame() {
         int WALL_WIDTH = 100;
@@ -54,10 +93,10 @@ public class GameLoop extends Canvas implements Runnable {
         gameManager.addSprite(new Platform(400, 320, WALL_WIDTH, WALL_HEIGHT));
         gameManager.addSprite(new Weapon(310, 200, 30, 8, 10, 5, 15, 50, 20));
 
-        String basepath = new File("").getAbsolutePath();
+        String basepath = new File(".").getAbsolutePath();
 
         try {
-            backgroundImage = ImageIO.read(new File(basepath + "\\src\\Resources\\background.jpg"));
+            backgroundImage = ImageIO.read(new File(basepath + "/src/Resources/background.jpg"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -192,7 +231,9 @@ public class GameLoop extends Canvas implements Runnable {
 
     private void update() {
         gameManager.updateEach();
+        //addBot();
         updateNum++;
+        item_drop();
     }
 
     public void resetPlayer() {

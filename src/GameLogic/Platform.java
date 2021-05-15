@@ -13,7 +13,7 @@ public class Platform extends Sprite {
         String basepath = new File("").getAbsolutePath();
 
         try {
-            image = ImageIO.read(new File(basepath + "\\src\\Resources\\platform.png"));
+            image = ImageIO.read(new File(basepath + "/src/Resources/platform.png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }

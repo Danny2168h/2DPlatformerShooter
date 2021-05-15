@@ -31,7 +31,7 @@ public class Projectile extends Sprite{
         }
         String basepath = new File("").getAbsolutePath();
         try {
-            image = ImageIO.read(new File(basepath+ "\\src\\Resources\\fireball.png"));
+            image = ImageIO.read(new File(basepath+ "/src/Resources/fireball.png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
