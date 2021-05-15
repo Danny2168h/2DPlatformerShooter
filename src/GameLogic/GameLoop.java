@@ -52,7 +52,7 @@ public class GameLoop extends Canvas implements Runnable {
         gameManager.addSprite(new Platform(300, 220, WALL_WIDTH, WALL_HEIGHT));
         gameManager.addSprite(new Platform(180, 290, WALL_WIDTH, WALL_HEIGHT));
         gameManager.addSprite(new Platform(400, 320, WALL_WIDTH, WALL_HEIGHT));
-        gameManager.addSprite(new Weapon(310, 200, 30, 8, 20.0, 5, 15.0, 5, 20, 3));
+        gameManager.addSprite(new Weapon(310, 200, 30, 8, 20.0, 100, 15.0, 5, 20, 3));
         gameManager.addSprite(new HealthPack(350, 340, 10, 10));
         String basepath = new File("").getAbsolutePath();
 
