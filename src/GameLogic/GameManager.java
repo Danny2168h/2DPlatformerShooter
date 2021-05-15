@@ -61,7 +61,11 @@ public class GameManager {
     }
 
     public void healthUpdate() {
-        gameWindow.updateHealth(player1.HP, player2.HP);
+        if(player2 == null) {
+            gameWindow.updateHealth(player1.HP, 1);
+        } else {
+            gameWindow.updateHealth(player1.HP, player2.HP);
+        }
     }
 
     public void ammoUpdate() {

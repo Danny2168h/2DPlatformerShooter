@@ -176,8 +176,12 @@ public class GameWindow extends JFrame {
     }
 
     public void updateHealth(int hp, int hp1) {
-        healthPro.setValue(hp);
-        healthPro1.setValue(hp1);
+        if(healthPro1 == null) {
+            healthPro.setValue(hp);
+        } else {
+            healthPro.setValue(hp);
+            healthPro1.setValue(hp1);
+        }
         if(hp <= 0) {
             playerWon(false);
         }
