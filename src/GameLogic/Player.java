@@ -49,6 +49,7 @@ public class Player extends Sprite {
         }
     }
 
+
     public void update(GameManager manager) {
 
         gameState = manager;
@@ -57,8 +58,6 @@ public class Player extends Sprite {
             addedWeapon = true;
             gameState.toAdd.add(weapon);
         }
-
-        gameState.healthUpdate();
 
         if (HP <= 0) {
             gameState.toDelete.add(this);
@@ -142,11 +141,12 @@ public class Player extends Sprite {
     //check if it will collide rather than dealing with collisions after colliding, if we check after it collides it is
     // ambiguous as to which dimensions collisions handler we should use
 
+    //method also handles interactions with items that player can pick up
     private void handleHorizontalCollision() {
 
-        Projectile p = new Projectile(1, 1, false, 0, 0,0,this);
-        Weapon w = new Weapon(0,0,0,0,0,0,0,0,this,0);
-        HealthPack h = new HealthPack(0,0,0,0);
+        Projectile p = new Projectile();
+        Weapon w = new Weapon();
+        HealthPack h = new HealthPack();
 
         boolean goingRight = false;
 
@@ -190,14 +190,15 @@ public class Player extends Sprite {
                 if (HP > 100) {
                     HP = 100;
                 }
+                gameState.healthUpdate();
             }
         }
     }
 
     private void handleVerticalCollisions() {
 
-        Projectile p = new Projectile(1, 1, false, 0, 0, 0,this);
-        Weapon w = new Weapon(0,0,0,0,0,0,0,0,this,0);
+        Projectile p = new Projectile();
+        Weapon w = new Weapon();
 
         boolean goingDown = false;
 

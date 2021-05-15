@@ -20,6 +20,10 @@ public class HealthPack extends Sprite{
 //        }
     }
 
+    public HealthPack() {
+        super(0,0,0,0);
+    }
+
     @Override
     public void update(GameManager manager) {
     }

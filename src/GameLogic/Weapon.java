@@ -48,6 +48,10 @@ public class Weapon extends Sprite {
         hitBox = new Rectangle(xLoc, yLoc, 20, 20);
     }
 
+    public Weapon() {
+        super(0,0,0,0);
+    }
+
 
     @Override
     public void update(GameManager manager) {

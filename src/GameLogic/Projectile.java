@@ -9,13 +9,13 @@ public class Projectile extends Sprite{
 
     private GameManager gameState;
 
-    private final int damage;
+    private int damage;
 
-    private final Player player;
+    private Player player;
 
-    private final boolean direction;
+    private boolean direction;
 
-    private final double knockBack;
+    private double knockBack;
 
     //true is positive (right), false is negative (left)
     public Projectile(int x, int y, boolean direction, int damage, double knockBack, double bulletSpeed, Player player) { //boolean determines which player projectile belongs to
@@ -37,6 +37,10 @@ public class Projectile extends Sprite{
         }
     }
 
+    public Projectile() {
+        super(0,0,0,0);
+    }
+
     @Override
     public void update(GameManager manager) {
         gameState = manager;
@@ -54,7 +58,7 @@ public class Projectile extends Sprite{
                     gameState.toDelete.add(this);
                     if (element.equals(gameState.player2)) {
                         gameState.player2.takeDamage(damage);
-                        //gameState.healthUpdate();
+                        gameState.healthUpdate();
                         if (direction) {
                             gameState.player2.knockBack(knockBack);
                         } else {
@@ -66,7 +70,7 @@ public class Projectile extends Sprite{
                     gameState.toDelete.add(this);
                     if (element.equals(gameState.player1)) {
                         gameState.player1.takeDamage(damage);
-                        //gameState.healthUpdate();
+                        gameState.healthUpdate();
                         if (direction) {
                             gameState.player1.knockBack(knockBack);
                         } else {
