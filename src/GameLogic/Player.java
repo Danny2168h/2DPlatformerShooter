@@ -199,6 +199,7 @@ public class Player extends Sprite {
 
         Projectile p = new Projectile();
         Weapon w = new Weapon();
+        HealthPack h = new HealthPack();
 
         boolean goingDown = false;
 
@@ -208,7 +209,8 @@ public class Player extends Sprite {
         Rectangle temp = new Rectangle(hitBox.x, (int) (hitBox.y + yVel), hitBox.width, hitBox.height);
         for (Sprite element : gameState.sprites) {
             if (element.hitBox.intersects(temp)) {
-                if (element.getClass() != p.getClass() && !element.equals(this) && element.getClass() != w.getClass()) {
+                if (element.getClass() != p.getClass() && !element.equals(this) && element.getClass() != w.getClass()
+                        && element.getClass() != h.getClass()) {
                     if (goingDown) {
                         yLoc = element.hitBox.y - hitBox.height;
                         hitBox.y = yLoc;
