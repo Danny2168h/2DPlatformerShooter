@@ -25,7 +25,7 @@ public class Player extends Sprite {
 
     private boolean addedWeapon = false;
 
-    private double maxXSpeed = 5;
+    private double maxXSpeed = 6;
     private static final double ACCELERATION = 0.75;
     private static final double JUMP_VELOCITY = 13;
 
@@ -38,7 +38,7 @@ public class Player extends Sprite {
 
         super(x, y, width, height);
 
-        weapon = new Weapon(0,20, 4, 2, 100, 10.0, 5, 5, this, 6);
+        weapon = new Weapon(0,20, 4, 3.5, 100, 10.0, 5, 5, this, 6);
 
         String basepath = new File("").getAbsolutePath();
 
@@ -63,12 +63,13 @@ public class Player extends Sprite {
             gameState.toDelete.add(this);
         }
 
+
         if (xVel > maxXSpeed) {
-            System.out.println(xVel + "   " + maxXSpeed);
+            System.out.println(xVel + "   " + xLoc + "   " + yLoc);
         }
 
         if (xVel < -1 * maxXSpeed) {
-            System.out.println(xVel + "   " + maxXSpeed);
+            System.out.println(xVel + "   " + xLoc + "   " + yLoc);
         }
 
         yVel += 1;
@@ -106,9 +107,13 @@ public class Player extends Sprite {
                 xVel += 0.75;
             }
         } else if (keyLeft && !keyRight) {
+            if (xVel > -1 * maxXSpeed) {
                 xVel -= ACCELERATION;
+            }
         } else if (keyRight && !keyLeft) {
+            if (xVel < maxXSpeed) {
                 xVel += ACCELERATION;
+            }
         }
         handleHorizontalCollision();
         horizontalLimiters();
@@ -172,7 +177,7 @@ public class Player extends Sprite {
             if (goingRight && element.getClass() != p.getClass() && !element.equals(this) && element.hitBox.intersects(right)
                     && element.getClass() != w.getClass() && element.getClass() != h.getClass()) {
                 xVel = 0;
-                xLoc = element.hitBox.x - width;
+                xLoc = element.hitBox.x - hitBox.width;
                 hitBox.x = xLoc;
             } else if (!goingRight && element.getClass() != p.getClass() && !element.equals(this) && element.hitBox.intersects(left)
                     && element.getClass() != w.getClass() && element.getClass() != h.getClass()) {
@@ -195,12 +200,14 @@ public class Player extends Sprite {
 
             if (element.hitBox.intersects(hitBox) && element.getClass() == h.getClass()) {
                 HealthPack temp = (HealthPack) element;
-                gameState.toDelete.add(element);
-                HP += temp.getHp();
-                if (HP > 100) {
-                    HP = 100;
+                if (!temp.checkUsed()) {
+                    temp.takeHealthPack();
+                    HP += temp.getHp();
+                    if (HP > 100) {
+                        HP = 100;
+                    }
+                    gameState.healthUpdate();
                 }
-                gameState.healthUpdate();
             }
         }
     }
@@ -226,12 +233,10 @@ public class Player extends Sprite {
                         hitBox.y = yLoc;
                         yVel = 0;
                         touchingGround = true;
-                        break;
                     } else {
                         yLoc = element.hitBox.y + element.hitBox.height;
                         hitBox.y = yLoc;
                         yVel = 0;
-                        break;
                     }
                 }
             }
@@ -266,26 +271,5 @@ public class Player extends Sprite {
     public void refreshedWeapon() {
         addedWeapon = false;
     }
-
-    //    private void projectileHandler() {
-//       if (counter != 0) {
-//           counter--;
-//       }
-//
-//        if (shoot && counter == 0 && ammo > 0 && HP > 0) {
-//            Projectile projectile;
-//            if (direction) {
-//                projectile = new Projectile(xLoc + width,
-//                        yLoc + height / 2, true, 5, 7, 10, this);
-//            } else {
-//                projectile = new Projectile(xLoc,
-//                        yLoc + height / 2, false, 5, 7,10, this);
-//            }
-//            gameState.toAdd.add(projectile);
-//            counter = coolDown;
-//            ammo--;
-//            gameState.ammoUpdate();
-//        }
-//    }
 
 }

@@ -14,7 +14,8 @@ public class Boundary extends Sprite {
 
     @Override
     public void render(Graphics g) {
-        //do nothing
+       g.setColor(Color.black);
+       g.fillRect(xLoc,yLoc, width, height);
     }
 }
 
