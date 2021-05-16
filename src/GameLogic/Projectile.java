@@ -51,30 +51,34 @@ public class Projectile extends Sprite{
 
     private void handleCollision() {
 
+        HealthPack h = new HealthPack();
+
         for (Sprite element : gameState.sprites) {
-            if (element.hitBox.intersects(hitBox)) {
-                if (!element.equals(this) && element.getClass() != this.getClass() && player.equals(gameState.player1) && !element.equals(gameState.player1)) {
-                    xVel = 0;
-                    gameState.toDelete.add(this);
-                    if (element.equals(gameState.player2)) {
-                        gameState.player2.takeDamage(damage);
-                        gameState.healthUpdate();
-                        if (direction) {
-                            gameState.player2.knockBack(knockBack);
-                        } else {
-                            gameState.player2.knockBack(knockBack * -1);
+            if (element.getClass() != h.getClass()) {
+                if (element.hitBox.intersects(hitBox)) {
+                    if (!element.equals(this) && element.getClass() != this.getClass() && player.equals(gameState.player1) && !element.equals(gameState.player1)) {
+                        xVel = 0;
+                        gameState.toDelete.add(this);
+                        if (element.equals(gameState.player2)) {
+                            gameState.player2.takeDamage(damage);
+                            gameState.healthUpdate();
+                            if (direction) {
+                                gameState.player2.knockBack(knockBack);
+                            } else {
+                                gameState.player2.knockBack(knockBack * -1);
+                            }
                         }
-                    }
-                } else if (!element.equals(this) && element.getClass() != this.getClass() && player.equals(gameState.player2) && !element.equals(gameState.player2)) {
-                    xVel = 0;
-                    gameState.toDelete.add(this);
-                    if (element.equals(gameState.player1)) {
-                        gameState.player1.takeDamage(damage);
-                        gameState.healthUpdate();
-                        if (direction) {
-                            gameState.player1.knockBack(knockBack);
-                        } else {
-                            gameState.player1.knockBack(knockBack * -1);
+                    } else if (!element.equals(this) && element.getClass() != this.getClass() && player.equals(gameState.player2) && !element.equals(gameState.player2)) {
+                        xVel = 0;
+                        gameState.toDelete.add(this);
+                        if (element.equals(gameState.player1)) {
+                            gameState.player1.takeDamage(damage);
+                            gameState.healthUpdate();
+                            if (direction) {
+                                gameState.player1.knockBack(knockBack);
+                            } else {
+                                gameState.player1.knockBack(knockBack * -1);
+                            }
                         }
                     }
                 }
