@@ -109,9 +109,9 @@ public class Weapon extends Sprite {
             g.fillRect(xLoc, yLoc, 20, 20);
         } else {
             if (player.getDirection()) {
-                g.fillRect(player.getxLoc() + 6*player.getWidth()/8, player.getyLoc() + player.getHeight()/2, width, height);
+                g.fillRect(player.getxLoc() + player.getWidth() - player.getWidth()/4, player.getyLoc() + player.getHeight()/2, width, height);
             } else {
-                g.fillRect(player.getxLoc() - 6*player.getWidth()/8, player.getyLoc() + player.getHeight()/2, width, height);
+                g.fillRect(player.getxLoc() - width + player.getWidth()/4, player.getyLoc() + player.getHeight()/2, width, height);
             }
         }
 
