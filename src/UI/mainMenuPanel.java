@@ -80,7 +80,7 @@ public class mainMenuPanel extends JPanel {
         InternalFrame frame = new InternalFrame();
         frame.setBounds(500, 200, 500, 300);
         frame.setVisible(true);
-        JOptionPane.showMessageDialog(frame, "WASD to walk, J to fire. Multiplayer: WASD and arrows to walk");
+        JOptionPane.showMessageDialog(frame, "Player 1: WASD to move, J to fire. \nPlayer 2: Arrow keys to move, 2 to fire.");
         JLabel invalid = new JLabel("Tutorial");
         invalid.setBounds(180, 500, 500, 300);
         frame.add(invalid);
