@@ -202,6 +202,7 @@ public class Player extends Sprite {
                 HealthPack temp = (HealthPack) element;
                 if (!temp.checkUsed()) {
                     temp.takeHealthPack();
+                    temp.switchLoc();
                     HP += temp.getHp();
                     if (HP > 100) {
                         HP = 100;
